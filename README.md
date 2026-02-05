@@ -857,6 +857,26 @@ python3 stack_recommender.py \
 
 This might recommend Go or Java, balancing performance, scalability, and team expertise.
 
+### Additional Inputs (Optional)
+You can improve recommendation quality by adding real-world constraints:
+- `--budget` (low/medium/high)
+- `--deployment` (serverless/containers/on-prem/edge/hybrid)
+- `--latency-ms` and `--throughput-rps` (reliability targets)
+- `--data-store` (sql/nosql/mixed)
+- `--compliance` (comma-separated, e.g., HIPAA, GDPR, SOC2)
+- `--hiring-priority` (low/medium/high)
+- `--must-use` / `--avoid` (hard constraints)
+
+Example:
+```bash
+python3 stack_recommender.py \
+  -p 7 -s 7 -d 5 -t medium \
+  --deployment serverless \
+  --latency-ms 200 \
+  --compliance SOC2 \
+  --hiring-priority high
+```
+
 ## 📝 Notes
 
 - **Warmup**: Some languages (especially Java) benefit from JIT warmup. Results may vary on first run.
