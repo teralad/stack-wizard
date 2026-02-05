@@ -87,15 +87,15 @@ This project benchmarks the same 5 performance-critical operations across all la
 ### Matrix Multiplication (100x100)
 | Language   | Execution Time | Relative Speed |
 |------------|----------------|----------------|
-| C#         | ~7 ms          | 0.5x           |
-| Rust       | ~15 ms         | 1.0x (fastest) |
-| C++        | ~18 ms         | 1.2x           |
-| Go         | ~25 ms         | 1.7x           |
-| Java       | ~30 ms         | 2.0x           |
-| JavaScript | ~40 ms         | 2.7x           |
-| Elixir     | ~64 ms         | 4.3x           |
-| Python     | ~250 ms        | 16.7x          |
-| Ruby       | ~400 ms        | 26.7x          |
+| C#         | ~7 ms          | 1.0x (fastest) |
+| Rust       | ~15 ms         | 2.1x           |
+| C++        | ~18 ms         | 2.6x           |
+| Go         | ~25 ms         | 3.6x           |
+| Java       | ~30 ms         | 4.3x           |
+| JavaScript | ~40 ms         | 5.7x           |
+| Elixir     | ~64 ms         | 9.1x           |
+| Python     | ~250 ms        | 35.7x          |
+| Ruby       | ~400 ms        | 57.1x          |
 | Scala      | TBD            | TBD            |
 
 ### String Operations
