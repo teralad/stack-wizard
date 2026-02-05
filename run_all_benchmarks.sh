@@ -80,6 +80,43 @@ ruby run_all.rb
 cd ..
 echo ""
 
+# Elixir
+echo "=== Elixir Benchmarks ==="
+if command -v mix &> /dev/null; then
+    cd elixir
+    mix deps.get --quiet 2>/dev/null || mix deps.get
+    elixir run_all.exs
+    cd ..
+    echo ""
+else
+    echo "Elixir not installed, skipping Elixir benchmarks"
+    echo ""
+fi
+
+# C#
+echo "=== C# Benchmarks ==="
+if command -v dotnet &> /dev/null; then
+    cd csharp
+    dotnet run
+    cd ..
+    echo ""
+else
+    echo ".NET SDK not installed, skipping C# benchmarks"
+    echo ""
+fi
+
+# Scala
+echo "=== Scala Benchmarks ==="
+if command -v sbt &> /dev/null; then
+    cd scala
+    sbt run
+    cd ..
+    echo ""
+else
+    echo "sbt not installed, skipping Scala benchmarks"
+    echo ""
+fi
+
 echo "========================================"
 echo "All Benchmarks Completed!"
 echo "========================================"

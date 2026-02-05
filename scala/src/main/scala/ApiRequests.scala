@@ -82,7 +82,7 @@ object ApiRequests {
    * Calculate percentile from sorted list.
    */
   def percentile(sortedList: List[Double], p: Double): Double = {
-    val index = math.max(0, math.min((sortedList.length * p).toInt - 1, sortedList.length - 1))
+    val index = math.max(0, math.min((sortedList.length * p).toInt, sortedList.length - 1))
     sortedList(index)
   }
 
