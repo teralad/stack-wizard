@@ -370,6 +370,25 @@ def test_unknown_must_use_fallback():
     print("✓ Unknown must-use fallback test passed")
 
 
+def test_scraping_parallel_bias():
+    """Test that scraping/parallel wording favors Go/Elixir"""
+    recommender = StackRecommender()
+    requirements = {
+        'performance': 8,
+        'scalability': 7,
+        'development_speed': 4,
+        'project_type': 'scraping several websites in parallel'
+    }
+
+    recommendations = recommender.analyze_requirements(requirements)
+    top_lang = recommendations[0][0]
+
+    assert top_lang in ['go', 'elixir'], \
+        f"Expected Go or Elixir for scraping/parallel, got {top_lang}"
+
+    print("✓ Scraping/parallel bias test passed")
+
+
 def run_all_tests():
     """Run all test functions"""
     print("\n" + "="*60)
@@ -392,7 +411,8 @@ def run_all_tests():
         test_latency_throughput_bias,
         test_deployment_serverless_bias,
         test_compliance_bonus,
-        test_unknown_must_use_fallback
+        test_unknown_must_use_fallback,
+        test_scraping_parallel_bias
     ]
     
     passed = 0

@@ -363,6 +363,13 @@ class StackRecommender:
             if project_type and self._matches_project_type(project_type, lang_data):
                 breakdown['project_type'] = 15
             score += breakdown['project_type']
+
+            # Scraping / crawling / parallel IO bias
+            project_type_lc = project_type.lower()
+            if any(k in project_type_lc for k in ['scrape', 'scraping', 'crawler', 'crawling', 'harvest', 'parallel']):
+                if lang_key in ['go', 'elixir']:
+                    breakdown['project_type'] += 10
+                    score += 10
             
             # Real-time requirements
             if requirements.get('real_time', False):
