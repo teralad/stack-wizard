@@ -24,7 +24,7 @@ import pandas as pd
 import numpy as np
 
 # Language directories to search for results
-LANGUAGES = ['python', 'javascript', 'go', 'rust', 'java', 'cpp', 'ruby']
+LANGUAGES = ['python', 'javascript', 'go', 'rust', 'java', 'cpp', 'ruby', 'elixir', 'csharp', 'scala']
 
 # Color palette for consistent visualization
 COLORS = {
@@ -34,7 +34,10 @@ COLORS = {
     'rust': '#ce422b',
     'java': '#007396',
     'cpp': '#00599c',
-    'ruby': '#cc342d'
+    'ruby': '#cc342d',
+    'elixir': '#4e2a8e',
+    'csharp': '#68217a',
+    'scala': '#dc322f'
 }
 
 def load_results():

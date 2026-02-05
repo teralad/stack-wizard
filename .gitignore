@@ -64,6 +64,27 @@ Makefile
 vendor/bundle/
 Gemfile.lock
 
+# Elixir
+_build/
+deps/
+*.ez
+*.beam
+.fetch
+
+# C#
+*.dll
+*.pdb
+bin/
+obj/
+
+# Scala
+target/
+project/target/
+project/project/
+.bsp/
+.metals/
+.bloop/
+
 # IDE
 .vscode/
 .idea/
@@ -73,6 +94,4 @@ Gemfile.lock
 .DS_Store
 
 # Build artifacts
-bin/
-obj/
 dist/
