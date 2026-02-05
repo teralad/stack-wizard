@@ -41,7 +41,7 @@ STACK_OPTIONS = {
     },
     'go': {
         'name': 'Go',
-        'frameworks': ['Gin', 'Echo', 'Fiber', 'Chi', 'Gorilla'],
+        'frameworks': ['Gin', 'Echo', 'Fiber', 'Chi', 'Gorilla', 'Buffalo', 'Goa', 'Beego'],
         'strengths': ['Fast execution', 'Easy concurrency', 'Simple syntax', 'Good performance', 'Built-in tooling'],
         'weaknesses': ['Limited ecosystem', 'Verbose error handling', 'Less mature frameworks'],
         'best_for': ['Microservices', 'Cloud services', 'APIs', 'CLI tools', 'Network services'],
@@ -59,7 +59,7 @@ STACK_OPTIONS = {
     },
     'java': {
         'name': 'Java',
-        'frameworks': ['Spring Boot', 'Micronaut', 'Quarkus', 'Dropwizard'],
+        'frameworks': ['Spring Boot', 'Micronaut', 'Quarkus', 'Dropwizard', 'Helidon', 'Vert.x', 'Javalin'],
         'strengths': ['Enterprise-ready', 'Mature ecosystem', 'Strong typing', 'JVM performance', 'Large talent pool'],
         'weaknesses': ['Verbose syntax', 'Slower startup', 'Higher memory usage', 'Complex config'],
         'best_for': ['Enterprise apps', 'Large systems', 'Banking/Finance', 'Long-term projects', 'Android backends'],
@@ -68,7 +68,7 @@ STACK_OPTIONS = {
     },
     'csharp': {
         'name': 'C#',
-        'frameworks': ['ASP.NET Core', '.NET', 'Nancy', 'ServiceStack'],
+        'frameworks': ['ASP.NET Core', '.NET', 'Nancy', 'ServiceStack', 'FastEndpoints', 'Carter', 'Minimal APIs'],
         'strengths': ['Modern language', 'Excellent tooling', 'Cross-platform', 'Strong typing', 'Great async support'],
         'weaknesses': ['Microsoft ecosystem', 'Limited Linux talent', 'Licensing concerns'],
         'best_for': ['Enterprise apps', 'Windows services', 'Azure cloud', 'Gaming backends', 'Desktop integration'],
@@ -134,6 +134,36 @@ FRAMEWORK_DETAILS = {
         'strengths': ['Comprehensive', 'Production-ready', 'Microservices', 'Security'],
         'best_for': ['Enterprise', 'Microservices', 'Cloud', 'Large systems']
     },
+    'Micronaut': {
+        'type': 'Cloud-native',
+        'strengths': ['Fast startup', 'Low memory', 'DI compile-time', 'Serverless'],
+        'best_for': ['Microservices', 'Serverless', 'Cloud', 'Fast startup']
+    },
+    'Quarkus': {
+        'type': 'Cloud-native',
+        'strengths': ['Fast startup', 'Kubernetes', 'GraalVM', 'Dev services'],
+        'best_for': ['Microservices', 'Containers', 'Serverless', 'Cloud']
+    },
+    'Dropwizard': {
+        'type': 'Minimal',
+        'strengths': ['Operationally focused', 'Metrics', 'Simple'],
+        'best_for': ['APIs', 'Microservices', 'Small services']
+    },
+    'Helidon': {
+        'type': 'Microservices',
+        'strengths': ['Lightweight', 'Reactive', 'Configurable'],
+        'best_for': ['Microservices', 'Cloud', 'Reactive systems']
+    },
+    'Vert.x': {
+        'type': 'Reactive',
+        'strengths': ['Event-driven', 'Reactive', 'Polyglot'],
+        'best_for': ['Real-time', 'Event-driven', 'Reactive systems']
+    },
+    'Javalin': {
+        'type': 'Minimal',
+        'strengths': ['Simple', 'Lightweight', 'Fast'],
+        'best_for': ['APIs', 'Microservices', 'Simple services']
+    },
     'Express.js': {
         'type': 'Minimal',
         'strengths': ['Simple', 'Flexible', 'Large ecosystem', 'Unopinionated'],
@@ -159,10 +189,65 @@ FRAMEWORK_DETAILS = {
         'strengths': ['Performance', 'Cross-platform', 'Tooling', 'Security'],
         'best_for': ['Enterprise', 'Azure', 'Microservices', 'APIs']
     },
+    'ServiceStack': {
+        'type': 'Productivity',
+        'strengths': ['Productivity', 'Typed APIs', 'Performance'],
+        'best_for': ['APIs', 'Services', 'Enterprise']
+    },
+    'FastEndpoints': {
+        'type': 'Minimal',
+        'strengths': ['Minimal APIs', 'Performance', 'Typed endpoints'],
+        'best_for': ['APIs', 'Microservices', 'High throughput']
+    },
+    'Carter': {
+        'type': 'Minimal',
+        'strengths': ['Modular routing', 'Minimal APIs', 'Simple'],
+        'best_for': ['APIs', 'Microservices', 'Simple services']
+    },
+    'Minimal APIs': {
+        'type': 'Minimal',
+        'strengths': ['Lightweight', 'Fast startup', 'Simple'],
+        'best_for': ['APIs', 'Microservices', 'Small services']
+    },
     'Gin': {
         'type': 'Fast',
         'strengths': ['Performance', 'Simple', 'Middleware', 'JSON'],
         'best_for': ['APIs', 'Microservices', 'High throughput', 'Simple services']
+    },
+    'Echo': {
+        'type': 'Fast',
+        'strengths': ['Performance', 'Middleware', 'Minimal'],
+        'best_for': ['APIs', 'Microservices', 'High throughput']
+    },
+    'Fiber': {
+        'type': 'Fast',
+        'strengths': ['Express-like', 'Performance', 'Low overhead'],
+        'best_for': ['APIs', 'Microservices', 'High throughput']
+    },
+    'Chi': {
+        'type': 'Minimal',
+        'strengths': ['Lightweight', 'Composable', 'Router'],
+        'best_for': ['APIs', 'Microservices', 'Simple services']
+    },
+    'Gorilla': {
+        'type': 'Toolkit',
+        'strengths': ['Stable', 'Routing', 'Middleware'],
+        'best_for': ['APIs', 'Microservices', 'Traditional services']
+    },
+    'Buffalo': {
+        'type': 'Full-stack',
+        'strengths': ['Conventions', 'Productivity', 'All-in-one'],
+        'best_for': ['Web apps', 'Full-stack', 'Rapid dev']
+    },
+    'Goa': {
+        'type': 'Design-first',
+        'strengths': ['Design-first', 'Codegen', 'Typed APIs'],
+        'best_for': ['APIs', 'Microservices', 'Contracts']
+    },
+    'Beego': {
+        'type': 'Full-stack',
+        'strengths': ['Full-featured', 'ORM', 'Scaffolding'],
+        'best_for': ['Web apps', 'APIs', 'Rapid dev']
     },
     'Actix-web': {
         'type': 'High-performance',
