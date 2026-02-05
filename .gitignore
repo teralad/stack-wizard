@@ -95,3 +95,4 @@ project/project/
 
 # Build artifacts
 dist/
+csharp/api_results.json
