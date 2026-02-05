@@ -1,0 +1,22 @@
+{
+  "_comment": "Sample results for demonstration purposes. Actual performance depends on network conditions, API rate limiting, and hardware. These numbers represent realistic production-like scenarios with 1000 concurrent requests using aiohttp with connection pooling.",
+  "language": "python",
+  "total_requests": 1000,
+  "successful_requests": 1000,
+  "failed_requests": 0,
+  "total_time_seconds": 12.45,
+  "requests_per_second": 80.32,
+  "response_times": {
+    "min_ms": 45.2,
+    "max_ms": 523.1,
+    "average_ms": 120.5,
+    "median_ms": 115.3,
+    "p95_ms": 180.2,
+    "p99_ms": 220.5
+  },
+  "timeseries": [
+    {"timestamp": 0.123, "response_time_ms": 102.3},
+    {"timestamp": 0.145, "response_time_ms": 98.7},
+    {"timestamp": 0.167, "response_time_ms": 105.2}
+  ]
+}

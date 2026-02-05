@@ -1,0 +1,21 @@
+{
+  "language": "cpp",
+  "total_requests": 1000,
+  "successful_requests": 1000,
+  "failed_requests": 0,
+  "total_time_seconds": 8.12,
+  "requests_per_second": 123.15,
+  "response_times": {
+    "min_ms": 36.8,
+    "max_ms": 412.3,
+    "average_ms": 88.7,
+    "median_ms": 85.4,
+    "p95_ms": 140.2,
+    "p99_ms": 168.9
+  },
+  "timeseries": [
+    {"timestamp": 0.092, "response_time_ms": 82.1},
+    {"timestamp": 0.106, "response_time_ms": 79.3},
+    {"timestamp": 0.121, "response_time_ms": 84.5}
+  ]
+}

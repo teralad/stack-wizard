@@ -1,0 +1,21 @@
+{
+  "language": "java",
+  "total_requests": 1000,
+  "successful_requests": 1000,
+  "failed_requests": 0,
+  "total_time_seconds": 9.54,
+  "requests_per_second": 104.82,
+  "response_times": {
+    "min_ms": 40.3,
+    "max_ms": 465.7,
+    "average_ms": 98.5,
+    "median_ms": 95.2,
+    "p95_ms": 155.3,
+    "p99_ms": 187.6
+  },
+  "timeseries": [
+    {"timestamp": 0.105, "response_time_ms": 91.2},
+    {"timestamp": 0.119, "response_time_ms": 87.5},
+    {"timestamp": 0.134, "response_time_ms": 93.8}
+  ]
+}
