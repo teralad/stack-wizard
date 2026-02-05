@@ -87,11 +87,11 @@ object ApiRequests {
   }
 
   /**
-   * Run API request benchmark with 10,000 concurrent requests.
+   * Run API request benchmark with 1,000 concurrent requests.
    */
   def runBenchmark(): ApiMetrics = {
     val url = "https://jsonplaceholder.typicode.com/posts/1"
-    val numRequests = 10000
+    val numRequests = 1000
 
     println(s"Starting benchmark: $numRequests requests to $url")
 

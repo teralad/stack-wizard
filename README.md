@@ -64,11 +64,10 @@ Each language's test suite includes:
 - **Metric**: Time for each operation
 
 ### 5. API Requests
-- **Operation**: 10,000 concurrent HTTP GET requests (1,000 for Python/JavaScript/Go/Rust/Java/C++/Ruby)
+- **Operation**: 1,000 concurrent HTTP GET requests
 - **Endpoint**: JSONPlaceholder API (https://jsonplaceholder.typicode.com/posts/1)
 - **Metrics**: Total time, requests per second, response times (min/max/avg/median/p95/p99), success rate
 - **Implementation**: Async/concurrent for all languages with proper connection pooling
-- **Note**: New languages (Elixir, C#, Scala) implement enhanced version with 10,000 requests
 
 ## 📊 Performance Comparison Tables
 
@@ -148,29 +147,22 @@ Each language's test suite includes:
 
 ## 🌐 API Performance Comparison
 
-We've enhanced our API performance testing to provide comprehensive metrics across all **10 languages**. The original 7 languages make **1,000 concurrent HTTP requests** while the new languages (Elixir, C#, Scala) implement an enhanced version with **10,000 concurrent requests** to test real-world API interaction performance at scale.
+We've enhanced our API performance testing to provide comprehensive metrics across all **10 languages**. All languages make **1,000 concurrent HTTP requests** to provide a fair, apples-to-apples comparison of API interaction performance.
 
 ### Performance Summary Table
-
-**Legacy Implementation (1,000 requests)**
 
 | Language   | Total Time | Requests/sec | Avg Response (ms) | P95 (ms) | P99 (ms) | Success Rate |
 |------------|------------|--------------|-------------------|----------|----------|--------------|
 | Rust       | 7.89s      | 126.74       | 85.2              | 135.7    | 162.8    | 100%         |
 | C++        | 8.12s      | 123.15       | 88.7              | 140.2    | 168.9    | 100%         |
+| Elixir     | 8.23s      | 121.51       | 78.23             | 142.89   | 178.45   | 100%         |
 | Go         | 8.76s      | 114.16       | 92.0              | 145.8    | 175.3    | 100%         |
+| Scala      | 9.02s      | 110.86       | 85.32             | 151.34   | 189.23   | 100%         |
 | Java       | 9.54s      | 104.82       | 98.5              | 155.3    | 187.6    | 100%         |
+| C#         | 9.89s      | 101.11       | 92.15             | 158.21   | 195.66   | 100%         |
 | JavaScript | 10.23s     | 97.75        | 105.8             | 165.4    | 198.7    | 100%         |
 | Python     | 12.45s     | 80.32        | 120.5             | 180.2    | 220.5    | 100%         |
 | Ruby       | 14.32s     | 69.83        | 135.2             | 210.5    | 248.3    | 100%         |
-
-**Enhanced Implementation (10,000 requests)**
-
-| Language | Total Time | Requests/sec | Avg Response (ms) | P95 (ms) | P99 (ms) | Success Rate |
-|----------|------------|--------------|-------------------|----------|----------|--------------|
-| Elixir   | 12.34s     | 810.37       | 78.23             | 142.89   | 178.45   | 100%         |
-| Scala    | 13.56s     | 737.24       | 85.32             | 151.34   | 189.23   | 100%         |
-| C#       | 14.87s     | 672.45       | 92.15             | 158.21   | 195.66   | 100%         |
 
 _Note: **These are illustrative sample results** provided for demonstration purposes. The numbers represent realistic performance characteristics but are not actual benchmark measurements. Actual performance will vary based on network conditions, API rate limiting, hardware specifications, and system load. To obtain real measurements for your environment, run `./run_all_benchmarks.sh` with network access to jsonplaceholder.typicode.com._
 
@@ -188,7 +180,7 @@ _Note: **These are illustrative sample results** provided for demonstration purp
 #### Throughput Comparison
 ![Throughput Comparison](visualizations/graphs/throughput_comparison.png)
 
-**Analysis**: For the legacy implementation (1,000 requests), Rust and C++ lead in throughput, handling 120+ requests per second. Go follows closely with excellent concurrency support. For the enhanced implementation (10,000 requests), Elixir shows impressive throughput (810 req/s) leveraging BEAM VM's lightweight processes, followed by Scala (737 req/s) and C# (672 req/s). Python and Ruby, while slower, still maintain respectable throughput for interpreted languages.
+**Analysis**: Rust and C++ lead in throughput, handling 120+ requests per second for 1,000 concurrent requests. Elixir shows excellent performance (121 req/s) leveraging BEAM VM's lightweight processes, placing it just behind the top compiled languages. Go and Scala follow with strong concurrency support (114 and 111 req/s respectively). Java and C# deliver solid performance with their mature async frameworks. Python and Ruby, while slower, still maintain respectable throughput for interpreted languages.
 
 #### Response Time Distribution
 ![Response Time Distribution](visualizations/graphs/response_time_distribution.png)

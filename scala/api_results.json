@@ -1,13 +1,13 @@
 {
-  "_comment": "SAMPLE DATA - These are illustrative results for demonstration purposes. Actual performance depends on network conditions, API rate limiting, and hardware. Run './run_all_benchmarks.sh' with network access to obtain real measurements for your environment. These numbers represent realistic production-like scenarios with 10000 concurrent requests using sttp client with parallel collections.",
+  "_comment": "SAMPLE DATA - These are illustrative results for demonstration purposes. Actual performance depends on network conditions, API rate limiting, and hardware. Run './run_all_benchmarks.sh' with network access to obtain real measurements for your environment. These numbers represent realistic production-like scenarios with 1000 concurrent requests using sttp client with parallel collections.",
   "language": "scala",
-  "total_requests": 10000,
-  "successful_requests": 10000,
+  "total_requests": 1000,
+  "successful_requests": 1000,
   "failed_requests": 0,
-  "total_time_seconds": 13.56,
-  "requests_per_second": 737.24,
+  "total_time_seconds": 9.02,
+  "requests_per_second": 110.86,
   "response_times": {
-    "min_ms": 40.15,
+    "min_ms": 45.15,
     "max_ms": 512.67,
     "average_ms": 85.32,
     "median_ms": 81.78,
@@ -15,10 +15,10 @@
     "p99_ms": 189.23
   },
   "timeseries": [
-    {"timestamp": 0.044, "response_time_ms": 83.5},
-    {"timestamp": 0.047, "response_time_ms": 86.1},
-    {"timestamp": 0.050, "response_time_ms": 80.4},
-    {"timestamp": 0.053, "response_time_ms": 88.7},
-    {"timestamp": 0.056, "response_time_ms": 78.9}
+    {"timestamp": 0.048, "response_time_ms": 83.5},
+    {"timestamp": 0.051, "response_time_ms": 86.1},
+    {"timestamp": 0.054, "response_time_ms": 80.4},
+    {"timestamp": 0.057, "response_time_ms": 88.7},
+    {"timestamp": 0.060, "response_time_ms": 78.9}
   ]
 }

@@ -59,7 +59,7 @@ defmodule ApiRequests do
   """
   def run_benchmark do
     url = "https://jsonplaceholder.typicode.com/posts/1"
-    num_requests = 10_000
+    num_requests = 1_000
     
     IO.puts("Starting benchmark: #{num_requests} requests to #{url}")
     
