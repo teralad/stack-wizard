@@ -1,5 +1,5 @@
 # Stack Wizard
 
-Multi-language performance comparison suite - Coming soon!
+Performance comparison suite across multiple programming languages.
 
-This repository will contain performance benchmarks across multiple programming languages.
+This repository is being set up...
