@@ -10,6 +10,9 @@ language and framework combination based on various criteria including:
 - Project type and complexity
 - Development speed priorities
 - Budget constraints
+- Deployment model
+- Compliance requirements
+- Reliability targets (latency/throughput)
 """
 
 import sys
@@ -189,8 +192,24 @@ class StackRecommender:
         self.requirements = requirements
         self.scores = {}
         
+        # Apply hard constraints first
+        constrained_languages = list(STACK_OPTIONS.keys())
+        must_use = [l.strip().lower() for l in requirements.get('must_use', []) if l.strip()]
+        avoid = [l.strip().lower() for l in requirements.get('avoid', []) if l.strip()]
+
+        if must_use:
+            constrained_languages = [l for l in constrained_languages if l in must_use]
+            if not constrained_languages:
+                # If nothing matches, fall back to all and note the miss
+                constrained_languages = list(STACK_OPTIONS.keys())
+                requirements['constraint_miss'] = True
+
+        if avoid:
+            constrained_languages = [l for l in constrained_languages if l not in avoid]
+
         # Score each language
-        for lang_key, lang_data in STACK_OPTIONS.items():
+        for lang_key in constrained_languages:
+            lang_data = STACK_OPTIONS[lang_key]
             score = 0.0
             
             # Performance requirements (0-10)
@@ -258,6 +277,59 @@ class StackRecommender:
             if requirements.get('microservices', False):
                 if lang_key in ['go', 'java', 'javascript']:
                     score += 10
+
+            # Budget constraints
+            budget = requirements.get('budget', '').lower()
+            if budget == 'low' and lang_key in ['python', 'javascript', 'go', 'ruby']:
+                score += 5
+            elif budget == 'high' and lang_key in ['java', 'csharp', 'rust']:
+                score += 3
+
+            # Deployment model
+            deployment = requirements.get('deployment', '').lower()
+            if deployment == 'serverless' and lang_key in ['python', 'javascript', 'go']:
+                score += 6
+            elif deployment == 'containers' and lang_key in ['go', 'rust', 'java']:
+                score += 4
+            elif deployment == 'on-prem' and lang_key in ['java', 'csharp']:
+                score += 5
+            elif deployment == 'edge' and lang_key in ['rust', 'cpp', 'go']:
+                score += 6
+
+            # Reliability targets
+            latency_ms = requirements.get('latency_ms')
+            if isinstance(latency_ms, int):
+                if latency_ms <= 100 and lang_key in ['rust', 'cpp', 'go']:
+                    score += 6
+                elif latency_ms <= 500 and lang_key in ['java', 'csharp', 'go']:
+                    score += 4
+
+            throughput_rps = requirements.get('throughput_rps')
+            if isinstance(throughput_rps, int):
+                if throughput_rps >= 10000 and lang_key in ['go', 'rust', 'cpp']:
+                    score += 6
+                elif throughput_rps >= 1000 and lang_key in ['go', 'rust', 'java']:
+                    score += 4
+
+            # Data store preference
+            data_store = requirements.get('data_store', '').lower()
+            if data_store == 'sql' and lang_key in ['java', 'csharp', 'python', 'ruby']:
+                score += 3
+            elif data_store == 'nosql' and lang_key in ['javascript', 'go']:
+                score += 3
+
+            # Compliance requirements
+            compliance = [c.lower() for c in requirements.get('compliance', [])]
+            if compliance:
+                if lang_key in ['java', 'csharp']:
+                    score += 6
+                elif lang_key in ['python', 'go']:
+                    score += 3
+
+            # Hiring priority
+            hiring_priority = requirements.get('hiring_priority', '').lower()
+            if hiring_priority == 'high' and lang_key in ['python', 'javascript', 'java', 'csharp']:
+                score += 5
             
             self.scores[lang_key] = score
         
@@ -357,6 +429,10 @@ class StackRecommender:
         
         output.append("="*80)
         output.append("\nRecommendation Criteria Used:")
+        if self.requirements.get('budget'):
+            output.append(f"  • Budget: {self.requirements['budget']}")
+        if self.requirements.get('deployment'):
+            output.append(f"  • Deployment Model: {self.requirements['deployment']}")
         if self.requirements.get('performance'):
             output.append(f"  • Performance Priority: {self.requirements['performance']}/10")
         if self.requirements.get('scalability'):
@@ -367,6 +443,42 @@ class StackRecommender:
             output.append(f"  • Team Size: {self.requirements['team_size']}")
         if self.requirements.get('project_type'):
             output.append(f"  • Project Type: {self.requirements['project_type']}")
+        if self.requirements.get('latency_ms'):
+            output.append(f"  • Latency Target: {self.requirements['latency_ms']} ms")
+        if self.requirements.get('throughput_rps'):
+            output.append(f"  • Throughput Target: {self.requirements['throughput_rps']} rps")
+        if self.requirements.get('data_store'):
+            output.append(f"  • Data Store Preference: {self.requirements['data_store']}")
+        if self.requirements.get('compliance'):
+            output.append(f"  • Compliance: {', '.join(self.requirements['compliance'])}")
+        if self.requirements.get('hiring_priority'):
+            output.append(f"  • Hiring Priority: {self.requirements['hiring_priority']}")
+        if self.requirements.get('must_use'):
+            output.append(f"  • Must Use: {', '.join(self.requirements['must_use'])}")
+        if self.requirements.get('avoid'):
+            output.append(f"  • Avoid: {', '.join(self.requirements['avoid'])}")
+        if self.requirements.get('constraint_miss'):
+            output.append("  • Note: None of the must-use languages matched; broadened recommendations.")
+
+        missing = []
+        for key, label in [
+            ('performance', 'Performance'),
+            ('scalability', 'Scalability'),
+            ('development_speed', 'Development Speed'),
+            ('team_size', 'Team Size'),
+            ('project_type', 'Project Type'),
+            ('deployment', 'Deployment Model'),
+            ('latency_ms', 'Latency Target'),
+            ('throughput_rps', 'Throughput Target'),
+            ('budget', 'Budget'),
+            ('compliance', 'Compliance'),
+        ]:
+            if not self.requirements.get(key):
+                missing.append(label)
+        if missing:
+            output.append("\nMissing Inputs (may reduce confidence):")
+            for item in missing:
+                output.append(f"  • {item}")
         
         output.append("\n" + "="*80)
         
@@ -433,33 +545,88 @@ def interactive_mode():
     project_type = input("   Your answer: ").strip()
     if project_type:
         requirements['project_type'] = project_type
+
+    # Budget constraints
+    print("\n6. What is your budget sensitivity?")
+    print("   Options: low / medium / high")
+    budget = input("   Your answer: ").strip().lower()
+    if budget in ['low', 'medium', 'high']:
+        requirements['budget'] = budget
     
     # Real-time requirements
-    print("\n6. Do you need real-time features? (yes/no)")
+    print("\n7. Do you need real-time features? (yes/no)")
     real_time = input("   Your answer: ").strip().lower()
     requirements['real_time'] = real_time in ['yes', 'y', 'true']
     
     # ML/AI requirements
-    print("\n7. Will this involve machine learning or AI? (yes/no)")
+    print("\n8. Will this involve machine learning or AI? (yes/no)")
     ml_ai = input("   Your answer: ").strip().lower()
     requirements['ml_ai'] = ml_ai in ['yes', 'y', 'true']
     
     # Enterprise requirements
-    print("\n8. Is this an enterprise application? (yes/no)")
+    print("\n9. Is this an enterprise application? (yes/no)")
     enterprise = input("   Your answer: ").strip().lower()
     requirements['enterprise'] = enterprise in ['yes', 'y', 'true']
     
     # Microservices
-    print("\n9. Are you building microservices? (yes/no)")
+    print("\n10. Are you building microservices? (yes/no)")
     microservices = input("   Your answer: ").strip().lower()
     requirements['microservices'] = microservices in ['yes', 'y', 'true']
+
+    # Deployment model
+    print("\n11. What is your deployment model?")
+    print("    Options: serverless / containers / on-prem / edge / hybrid / unsure")
+    deployment = input("    Your answer: ").strip().lower()
+    if deployment in ['serverless', 'containers', 'on-prem', 'edge', 'hybrid']:
+        requirements['deployment'] = deployment
+
+    # Reliability targets
+    print("\n12. What is your target p95 latency in ms? (press Enter to skip)")
+    latency = input("    Your answer: ").strip()
+    if latency.isdigit():
+        requirements['latency_ms'] = int(latency)
+
+    print("\n13. What throughput do you expect (requests per second)? (press Enter to skip)")
+    rps = input("    Your answer: ").strip()
+    if rps.isdigit():
+        requirements['throughput_rps'] = int(rps)
+
+    # Data store preference
+    print("\n14. Data store preference?")
+    print("    Options: sql / nosql / mixed / unsure")
+    data_store = input("    Your answer: ").strip().lower()
+    if data_store in ['sql', 'nosql', 'mixed']:
+        requirements['data_store'] = data_store
+
+    # Compliance
+    print("\n15. Any compliance requirements? (comma-separated, e.g., HIPAA, GDPR, SOC2)")
+    compliance = input("    Your answer: ").strip()
+    if compliance:
+        requirements['compliance'] = [c.strip() for c in compliance.split(',') if c.strip()]
+
+    # Hiring priority
+    print("\n16. How important is hiring availability? (low/medium/high)")
+    hiring = input("    Your answer: ").strip().lower()
+    if hiring in ['low', 'medium', 'high']:
+        requirements['hiring_priority'] = hiring
     
     # Team expertise
-    print("\n10. What languages does your team already know?")
+    print("\n17. What languages does your team already know?")
     print("    (comma-separated, e.g., Python, JavaScript, Java)")
     expertise = input("    Your answer: ").strip()
     if expertise:
         requirements['team_expertise'] = [e.strip() for e in expertise.split(',')]
+
+    # Hard constraints
+    print("\n18. Must-use languages? (comma-separated, optional)")
+    must_use = input("    Your answer: ").strip()
+    if must_use:
+        requirements['must_use'] = [e.strip() for e in must_use.split(',')]
+
+    print("\n19. Languages to avoid? (comma-separated, optional)")
+    avoid = input("    Your answer: ").strip()
+    if avoid:
+        requirements['avoid'] = [e.strip() for e in avoid.split(',')]
     
     # Analyze and show recommendations
     print("\n\nAnalyzing your requirements...")
@@ -511,6 +678,39 @@ def cli_mode(args):
         elif arg in ['--project-type', '-pt'] and i + 1 < len(args):
             requirements['project_type'] = args[i + 1]
             i += 2
+        elif arg == '--budget' and i + 1 < len(args):
+            requirements['budget'] = args[i + 1]
+            i += 2
+        elif arg == '--deployment' and i + 1 < len(args):
+            requirements['deployment'] = args[i + 1]
+            i += 2
+        elif arg == '--latency-ms' and i + 1 < len(args):
+            try:
+                requirements['latency_ms'] = int(args[i + 1])
+            except ValueError:
+                pass
+            i += 2
+        elif arg == '--throughput-rps' and i + 1 < len(args):
+            try:
+                requirements['throughput_rps'] = int(args[i + 1])
+            except ValueError:
+                pass
+            i += 2
+        elif arg == '--data-store' and i + 1 < len(args):
+            requirements['data_store'] = args[i + 1]
+            i += 2
+        elif arg == '--compliance' and i + 1 < len(args):
+            requirements['compliance'] = [c.strip() for c in args[i + 1].split(',') if c.strip()]
+            i += 2
+        elif arg == '--hiring-priority' and i + 1 < len(args):
+            requirements['hiring_priority'] = args[i + 1]
+            i += 2
+        elif arg == '--must-use' and i + 1 < len(args):
+            requirements['must_use'] = [c.strip() for c in args[i + 1].split(',') if c.strip()]
+            i += 2
+        elif arg == '--avoid' and i + 1 < len(args):
+            requirements['avoid'] = [c.strip() for c in args[i + 1].split(',') if c.strip()]
+            i += 2
         elif arg == '--real-time':
             requirements['real_time'] = True
             i += 1
@@ -553,6 +753,15 @@ OPTIONS:
     -d, --dev-speed NUM          Development speed priority (1-10)
     -t, --team-size SIZE         Team size (small/medium/large)
     -pt, --project-type TYPE     Project type (e.g., api, microservice, webapp)
+    --budget LEVEL               Budget sensitivity (low/medium/high)
+    --deployment MODEL           Deployment model (serverless/containers/on-prem/edge/hybrid)
+    --latency-ms NUM             Target p95 latency in ms
+    --throughput-rps NUM         Target throughput (requests per second)
+    --data-store TYPE            Data store preference (sql/nosql/mixed)
+    --compliance LIST            Compliance requirements (comma-separated)
+    --hiring-priority LEVEL      Hiring availability importance (low/medium/high)
+    --must-use LIST              Must-use languages (comma-separated)
+    --avoid LIST                 Languages to avoid (comma-separated)
     --real-time                  Real-time features required
     --ml-ai                      Machine learning/AI features needed
     --enterprise                 Enterprise application

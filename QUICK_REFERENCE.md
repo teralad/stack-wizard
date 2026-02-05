@@ -27,6 +27,15 @@ python3 stack_recommender.py --enterprise --microservices -t large -s 9
 
 # With Team Expertise
 python3 stack_recommender.py -d 7 -e Python,JavaScript --project-type api
+
+# Serverless API with latency target
+python3 stack_recommender.py --deployment serverless --latency-ms 150 -p 7 -s 6 --project-type api
+
+# Compliance-heavy enterprise system
+python3 stack_recommender.py --enterprise --compliance HIPAA --team-size large -s 8 -p 6
+
+# Must-use/avoid constraints
+python3 stack_recommender.py --must-use Rust --avoid Python,JavaScript -p 8 -s 7
 ```
 
 ## Command-Line Options
@@ -38,6 +47,15 @@ python3 stack_recommender.py -d 7 -e Python,JavaScript --project-type api
 | `-d, --dev-speed` | 1-10 | Development speed priority (10 = MVP fast) |
 | `-t, --team-size` | small/medium/large | Team size |
 | `-pt, --project-type` | text | Type of project (api, webapp, chat, etc.) |
+| `--budget` | low/medium/high | Budget sensitivity |
+| `--deployment` | serverless/containers/on-prem/edge/hybrid | Deployment model |
+| `--latency-ms` | number | Target p95 latency in ms |
+| `--throughput-rps` | number | Target throughput (requests per second) |
+| `--data-store` | sql/nosql/mixed | Data store preference |
+| `--compliance` | comma-separated | Compliance requirements |
+| `--hiring-priority` | low/medium/high | Hiring availability importance |
+| `--must-use` | comma-separated | Must-use languages |
+| `--avoid` | comma-separated | Languages to avoid |
 | `--real-time` | flag | Real-time features needed |
 | `--ml-ai` | flag | Machine learning/AI features |
 | `--enterprise` | flag | Enterprise application |

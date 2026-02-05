@@ -253,6 +253,123 @@ def test_score_ranges():
     print("✓ Score ranges test passed")
 
 
+def test_must_use_filtering():
+    """Test that must-use languages constrain recommendations"""
+    recommender = StackRecommender()
+    requirements = {
+        'performance': 5,
+        'scalability': 5,
+        'development_speed': 5,
+        'must_use': ['Rust']
+    }
+
+    recommendations = recommender.analyze_requirements(requirements)
+    top_lang = recommendations[0][0]
+
+    assert top_lang == 'rust', \
+        f"Expected Rust due to must-use constraint, got {top_lang}"
+
+    print("✓ Must-use filtering test passed")
+
+
+def test_avoid_filtering():
+    """Test that avoid list removes languages from recommendations"""
+    recommender = StackRecommender()
+    requirements = {
+        'performance': 5,
+        'scalability': 5,
+        'development_speed': 5,
+        'avoid': ['python']
+    }
+
+    recommendations = recommender.analyze_requirements(requirements)
+    languages = [lang for lang, _, _ in recommendations]
+
+    assert 'python' not in languages, \
+        "Expected python to be excluded by avoid list"
+
+    print("✓ Avoid filtering test passed")
+
+
+def test_latency_throughput_bias():
+    """Test that tight latency/high throughput favors high-perf languages"""
+    recommender = StackRecommender()
+    requirements = {
+        'performance': 7,
+        'scalability': 8,
+        'development_speed': 4,
+        'latency_ms': 80,
+        'throughput_rps': 20000
+    }
+
+    recommendations = recommender.analyze_requirements(requirements)
+    top_lang = recommendations[0][0]
+
+    assert top_lang in ['rust', 'cpp', 'go'], \
+        f"Expected low-latency/high-throughput language, got {top_lang}"
+
+    print("✓ Latency/throughput bias test passed")
+
+
+def test_deployment_serverless_bias():
+    """Test that serverless deployment favors supported languages"""
+    recommender = StackRecommender()
+    requirements = {
+        'performance': 5,
+        'scalability': 5,
+        'development_speed': 6,
+        'deployment': 'serverless'
+    }
+
+    recommendations = recommender.analyze_requirements(requirements)
+    top_lang = recommendations[0][0]
+
+    assert top_lang in ['python', 'javascript', 'go'], \
+        f"Expected serverless-friendly language, got {top_lang}"
+
+    print("✓ Deployment model bias test passed")
+
+
+def test_compliance_bonus():
+    """Test that compliance + enterprise favors Java/C#"""
+    recommender = StackRecommender()
+    requirements = {
+        'performance': 5,
+        'scalability': 7,
+        'development_speed': 4,
+        'team_size': 'large',
+        'enterprise': True,
+        'compliance': ['HIPAA']
+    }
+
+    recommendations = recommender.analyze_requirements(requirements)
+    top_lang = recommendations[0][0]
+
+    assert top_lang in ['java', 'csharp'], \
+        f"Expected compliance/enterprise language, got {top_lang}"
+
+    print("✓ Compliance bonus test passed")
+
+
+def test_unknown_must_use_fallback():
+    """Test that unknown must-use languages fall back to full set"""
+    recommender = StackRecommender()
+    requirements = {
+        'performance': 5,
+        'scalability': 5,
+        'development_speed': 5,
+        'must_use': ['kotlin']
+    }
+
+    recommendations = recommender.analyze_requirements(requirements)
+    assert len(recommendations) == 5, \
+        "Expected fallback to full recommendations when must-use misses"
+    assert recommender.requirements.get('constraint_miss') is True, \
+        "Expected constraint_miss flag when must-use doesn't match"
+
+    print("✓ Unknown must-use fallback test passed")
+
+
 def run_all_tests():
     """Run all test functions"""
     print("\n" + "="*60)
@@ -269,7 +386,13 @@ def run_all_tests():
         test_framework_recommendations,
         test_balanced_requirements,
         test_all_languages_present,
-        test_score_ranges
+        test_score_ranges,
+        test_must_use_filtering,
+        test_avoid_filtering,
+        test_latency_throughput_bias,
+        test_deployment_serverless_bias,
+        test_compliance_bonus,
+        test_unknown_must_use_fallback
     ]
     
     passed = 0
