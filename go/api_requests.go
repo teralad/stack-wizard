@@ -24,14 +24,14 @@ type RequestResult struct {
 
 // Metrics holds all benchmark metrics
 type Metrics struct {
-	Language           string                   `json:"language"`
-	TotalRequests      int                      `json:"total_requests"`
-	SuccessfulRequests int                      `json:"successful_requests"`
-	FailedRequests     int                      `json:"failed_requests"`
-	TotalTimeSeconds   float64                  `json:"total_time_seconds"`
-	RequestsPerSecond  float64                  `json:"requests_per_second"`
-	ResponseTimes      map[string]float64       `json:"response_times"`
-	Timeseries         []map[string]float64     `json:"timeseries"`
+	Language           string               `json:"language"`
+	TotalRequests      int                  `json:"total_requests"`
+	SuccessfulRequests int                  `json:"successful_requests"`
+	FailedRequests     int                  `json:"failed_requests"`
+	TotalTimeSeconds   float64              `json:"total_time_seconds"`
+	RequestsPerSecond  float64              `json:"requests_per_second"`
+	ResponseTimes      map[string]float64   `json:"response_times"`
+	Timeseries         []map[string]float64 `json:"timeseries"`
 }
 
 // Make a single HTTP request with timing
@@ -65,7 +65,7 @@ func percentile(sortedData []float64, p float64) float64 {
 	if len(sortedData) == 0 {
 		return 0
 	}
-	index := int(math.Ceil(float64(len(sortedData)) * p)) - 1
+	index := int(math.Ceil(float64(len(sortedData))*p)) - 1
 	if index < 0 {
 		index = 0
 	}
@@ -194,11 +194,11 @@ func RunAPIBenchmark() {
 
 func printResults(metrics Metrics) {
 	fmt.Println("\n" + string(make([]byte, 60)))
-	for i := range make([]byte, 60) {
+	for range make([]byte, 60) {
 		fmt.Print("=")
 	}
 	fmt.Printf("\nLanguage: %s\n", "GO")
-	for i := range make([]byte, 60) {
+	for range make([]byte, 60) {
 		fmt.Print("=")
 	}
 	fmt.Printf("\nTotal Requests: %d\n", metrics.TotalRequests)
@@ -216,7 +216,7 @@ func printResults(metrics Metrics) {
 		fmt.Printf("  P95: %.2f\n", metrics.ResponseTimes["p95_ms"])
 		fmt.Printf("  P99: %.2f\n", metrics.ResponseTimes["p99_ms"])
 	}
-	for i := range make([]byte, 60) {
+	for range make([]byte, 60) {
 		fmt.Print("=")
 	}
 	fmt.Println()

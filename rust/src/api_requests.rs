@@ -3,8 +3,7 @@
 /// Collects comprehensive metrics including response times, throughput, and percentiles.
 
 use reqwest;
-use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
+use serde::Serialize;
 use std::fs::File;
 use std::io::Write;
 use std::time::{Duration, Instant};
@@ -114,7 +113,10 @@ pub async fn run_benchmark() {
     let mut handles = Vec::with_capacity(num_requests);
     for i in 0..num_requests {
         let client_clone = client.clone();
-        let handle = tokio::spawn(make_request(client_clone, url, i, start_time));
+        let url_str = url.to_string();
+        let handle = tokio::spawn(async move {
+            make_request(&client_clone, &url_str, i, start_time).await
+        });
         handles.push(handle);
     }
 
