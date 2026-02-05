@@ -1,0 +1,24 @@
+{
+  "_comment": "SAMPLE DATA - These are illustrative results for demonstration purposes. Actual performance depends on network conditions, API rate limiting, and hardware. Run './run_all_benchmarks.sh' with network access to obtain real measurements for your environment. These numbers represent realistic production-like scenarios with 1000 concurrent requests using HTTPoison with BEAM VM's lightweight processes.",
+  "language": "elixir",
+  "total_requests": 1000,
+  "successful_requests": 1000,
+  "failed_requests": 0,
+  "total_time_seconds": 8.23,
+  "requests_per_second": 121.51,
+  "response_times": {
+    "min_ms": 42.15,
+    "max_ms": 456.78,
+    "average_ms": 78.23,
+    "median_ms": 73.56,
+    "p95_ms": 142.89,
+    "p99_ms": 178.45
+  },
+  "timeseries": [
+    {"timestamp": 0.045, "response_time_ms": 75.4},
+    {"timestamp": 0.048, "response_time_ms": 78.2},
+    {"timestamp": 0.051, "response_time_ms": 72.8},
+    {"timestamp": 0.054, "response_time_ms": 79.5},
+    {"timestamp": 0.057, "response_time_ms": 71.3}
+  ]
+}

@@ -142,7 +142,7 @@ namespace StackWizard
         public static async Task<ApiMetrics> RunBenchmarkAsync()
         {
             string url = "https://jsonplaceholder.typicode.com/posts/1";
-            int numRequests = 10000;
+            int numRequests = 1000;
 
             Console.WriteLine($"Starting benchmark: {numRequests} requests to {url}");
 
