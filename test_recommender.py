@@ -9,6 +9,12 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from stack_recommender import StackRecommender, STACK_OPTIONS
 
+
+def get_language_score(recommendations, language):
+    """Helper function to get score for a specific language from recommendations"""
+    return next((score for lang, score, _ in recommendations if lang == language), 0)
+
+
 def test_performance_priority():
     """Test that high-performance requirements favor compiled languages"""
     recommender = StackRecommender()
@@ -132,14 +138,15 @@ def test_team_expertise_bonus():
     }
     recommendations2 = recommender.analyze_requirements(requirements2)
     
-    # Find Ruby's rank in both
-    ruby_score1 = next((score for lang, score, _ in recommendations1 if lang == 'ruby'), 0)
-    ruby_score2 = next((score for lang, score, _ in recommendations2 if lang == 'ruby'), 0)
+    # Find Ruby's rank in both using helper
+    ruby_score1 = get_language_score(recommendations1, 'ruby')
+    ruby_score2 = get_language_score(recommendations2, 'ruby')
     
     assert ruby_score2 > ruby_score1, \
         "Team expertise should boost score"
     
     print("✓ Team expertise bonus test passed")
+
 
 
 def test_framework_recommendations():

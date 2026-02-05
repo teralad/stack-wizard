@@ -231,10 +231,8 @@ class StackRecommender:
             
             # Project type matching
             project_type = requirements.get('project_type', '')
-            if project_type:
-                if any(pt.lower() in ' '.join(lang_data['best_for']).lower() 
-                       for pt in project_type.split(',')):
-                    score += 15
+            if project_type and self._matches_project_type(project_type, lang_data):
+                score += 15
             
             # Real-time requirements
             if requirements.get('real_time', False):
@@ -273,6 +271,12 @@ class StackRecommender:
             recommendations.append((lang_key, score, framework))
         
         return recommendations
+    
+    def _matches_project_type(self, project_type: str, lang_data: Dict) -> bool:
+        """Check if project type matches language's best use cases"""
+        best_for_text = ' '.join(lang_data['best_for']).lower()
+        project_keywords = [pt.strip().lower() for pt in project_type.split(',')]
+        return any(keyword in best_for_text for keyword in project_keywords)
     
     def _recommend_framework(self, lang_key: str, requirements: Dict) -> str:
         """Recommend the best framework for a language based on requirements"""
