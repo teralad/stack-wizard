@@ -1,4 +1,5 @@
 {
+  "_comment": "Sample results for demonstration purposes. Actual performance depends on network conditions, API rate limiting, and hardware. These numbers represent realistic production-like scenarios with 1000 concurrent requests using aiohttp with connection pooling.",
   "language": "python",
   "total_requests": 1000,
   "successful_requests": 1000,

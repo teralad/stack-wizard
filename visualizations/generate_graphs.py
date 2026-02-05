@@ -102,6 +102,9 @@ def create_response_time_distribution(results, output_dir):
         if data.get('response_times') and data['successful_requests'] > 0:
             rt = data['response_times']
             # Create box plot data points
+            # Note: Since we only have min/median/p95/p99/max from the JSON data,
+            # we approximate Q1 as the midpoint between min and median.
+            # This is a simplified representation for visualization purposes.
             data_for_plot.append([
                 rt['min_ms'],
                 rt['median_ms'] - (rt['median_ms'] - rt['min_ms']) / 2,  # Q1 approximation
@@ -200,8 +203,8 @@ def create_response_time_heatmap(results, output_dir):
     # Add text annotations
     for i in range(len(metrics_data)):
         for j in range(len(languages)):
-            text = ax.text(j, i, f'{matrix[i, j]:.1f}',
-                          ha="center", va="center", color="black", fontweight='bold', fontsize=10)
+            ax.text(j, i, f'{matrix[i, j]:.1f}',
+                   ha="center", va="center", color="black", fontweight='bold', fontsize=10)
     
     ax.set_title('API Performance: Response Time Heatmap (ms)', fontsize=16, fontweight='bold', pad=20)
     plt.colorbar(im, ax=ax, label='Response Time (ms)')
