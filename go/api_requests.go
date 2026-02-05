@@ -75,18 +75,18 @@ func percentile(sortedData []float64, p float64) float64 {
 	return sortedData[index]
 }
 
-// RunAPIBenchmark runs API request benchmark with 10,000 concurrent requests
+// RunAPIBenchmark runs API request benchmark with 1,000 concurrent requests
 func RunAPIBenchmark() {
 	url := "https://jsonplaceholder.typicode.com/posts/1"
-	numRequests := 10000
+	numRequests := 1000
 
 	fmt.Printf("Starting benchmark: %d requests to %s\n", numRequests, url)
 
 	// Create HTTP client with connection pooling
 	client := &http.Client{
 		Transport: &http.Transport{
-			MaxIdleConnsPerHost: 100,
-			MaxConnsPerHost:     100,
+			MaxIdleConnsPerHost: 50,
+			MaxConnsPerHost:     50,
 		},
 		Timeout: 10 * time.Second,
 	}

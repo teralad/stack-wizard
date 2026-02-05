@@ -128,12 +128,12 @@ public class ApiRequests {
     }
 
     /**
-     * Run API request benchmark with 10,000 concurrent requests.
+     * Run API request benchmark with 1,000 concurrent requests.
      * Uses HttpClient with CompletableFuture for async operations.
      */
     public static void runBenchmark() {
         String url = "https://jsonplaceholder.typicode.com/posts/1";
-        int numRequests = 10000;
+        int numRequests = 1000;
 
         System.out.println("Starting benchmark: " + numRequests + " requests to " + url);
 

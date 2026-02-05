@@ -50,17 +50,17 @@ function percentile(arr, p) {
 }
 
 /**
- * Run API request benchmark with 10,000 concurrent requests.
+ * Run API request benchmark with 1,000 concurrent requests.
  * Uses native https module with connection pooling.
  */
 async function runBenchmark() {
     const url = "https://jsonplaceholder.typicode.com/posts/1";
-    const numRequests = 10000;
+    const numRequests = 1000;
     
     console.log(`Starting benchmark: ${numRequests} requests to ${url}`);
     
     // Increase max sockets for better concurrency
-    https.globalAgent.maxSockets = 100;
+    https.globalAgent.maxSockets = 50;
     
     // Measure total time for concurrent requests
     const startTime = performance.now();

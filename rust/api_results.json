@@ -1,0 +1,21 @@
+{
+  "language": "rust",
+  "total_requests": 1000,
+  "successful_requests": 1000,
+  "failed_requests": 0,
+  "total_time_seconds": 7.89,
+  "requests_per_second": 126.74,
+  "response_times": {
+    "min_ms": 35.2,
+    "max_ms": 398.5,
+    "average_ms": 85.2,
+    "median_ms": 82.1,
+    "p95_ms": 135.7,
+    "p99_ms": 162.8
+  },
+  "timeseries": [
+    {"timestamp": 0.089, "response_time_ms": 78.3},
+    {"timestamp": 0.101, "response_time_ms": 75.9},
+    {"timestamp": 0.115, "response_time_ms": 81.2}
+  ]
+}

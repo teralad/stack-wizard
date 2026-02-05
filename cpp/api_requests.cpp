@@ -203,12 +203,12 @@ void print_results(const std::vector<RequestResult>& results, int total_requests
     std::cout << std::string(60, '=') << "\n" << std::endl;
 }
 
-// Run API request benchmark with 10,000 concurrent requests
+// Run API request benchmark with 1,000 concurrent requests
 void run_benchmark() {
     curl_global_init(CURL_GLOBAL_DEFAULT);
     
     std::string url = "https://jsonplaceholder.typicode.com/posts/1";
-    int num_requests = 10000;
+    int num_requests = 1000;
 
     std::cout << "Starting benchmark: " << num_requests << " requests to " << url << std::endl;
 

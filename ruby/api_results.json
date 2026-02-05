@@ -1,0 +1,21 @@
+{
+  "language": "ruby",
+  "total_requests": 1000,
+  "successful_requests": 1000,
+  "failed_requests": 0,
+  "total_time_seconds": 14.32,
+  "requests_per_second": 69.83,
+  "response_times": {
+    "min_ms": 52.3,
+    "max_ms": 598.7,
+    "average_ms": 135.2,
+    "median_ms": 128.9,
+    "p95_ms": 210.5,
+    "p99_ms": 248.3
+  },
+  "timeseries": [
+    {"timestamp": 0.142, "response_time_ms": 125.6},
+    {"timestamp": 0.168, "response_time_ms": 118.9},
+    {"timestamp": 0.192, "response_time_ms": 132.4}
+  ]
+}

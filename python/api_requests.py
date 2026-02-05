@@ -39,11 +39,11 @@ async def make_request(session, url, request_id, start_time):
 
 async def run_benchmark():
     """
-    Run API request benchmark with 10,000 concurrent requests.
+    Run API request benchmark with 1,000 concurrent requests.
     Uses aiohttp for async HTTP requests with connection pooling.
     """
     url = "https://jsonplaceholder.typicode.com/posts/1"
-    num_requests = 10000
+    num_requests = 1000
     
     print(f"Starting benchmark: {num_requests} requests to {url}")
     
@@ -51,7 +51,7 @@ async def run_benchmark():
     start_time = time.time()
     
     # Create a connection pool with appropriate limits
-    connector = aiohttp.TCPConnector(limit=100, limit_per_host=100)
+    connector = aiohttp.TCPConnector(limit=50, limit_per_host=50)
     async with aiohttp.ClientSession(connector=connector) as session:
         tasks = [make_request(session, url, i, start_time) for i in range(num_requests)]
         results = await asyncio.gather(*tasks)

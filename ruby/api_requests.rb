@@ -42,10 +42,10 @@ def percentile(sorted_data, p)
   sorted_data[index]
 end
 
-# Run API request benchmark with 10,000 concurrent requests
+# Run API request benchmark with 1,000 concurrent requests
 def run_benchmark
   url = "https://jsonplaceholder.typicode.com/posts/1"
-  num_requests = 10000
+  num_requests = 1000
 
   puts "Starting benchmark: #{num_requests} requests to #{url}"
 

@@ -94,16 +94,16 @@ fn percentile(sorted_data: &[f64], p: f64) -> f64 {
     sorted_data[index.min(sorted_data.len() - 1)]
 }
 
-/// Run API request benchmark with 10,000 concurrent requests
+/// Run API request benchmark with 1,000 concurrent requests
 pub async fn run_benchmark() {
     let url = "https://jsonplaceholder.typicode.com/posts/1";
-    let num_requests = 10000;
+    let num_requests = 1000;
 
     println!("Starting benchmark: {} requests to {}", num_requests, url);
 
     // Create HTTP client with connection pooling
     let client = reqwest::Client::builder()
-        .pool_max_idle_per_host(100)
+        .pool_max_idle_per_host(50)
         .timeout(Duration::from_secs(10))
         .build()
         .expect("Failed to create HTTP client");
