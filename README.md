@@ -172,7 +172,7 @@ We've enhanced our API performance testing to provide comprehensive metrics acro
 | Scala    | 13.56s     | 737.24       | 85.32             | 151.34   | 189.23   | 100%         |
 | C#       | 14.87s     | 672.45       | 92.15             | 158.21   | 195.66   | 100%         |
 
-_Note: These are sample results for demonstration purposes. Actual performance depends on network conditions, API rate limiting, and hardware. Run the benchmarks locally with `./run_all_benchmarks.sh` to obtain results for your system._
+_Note: **These are illustrative sample results** provided for demonstration purposes. The numbers represent realistic performance characteristics but are not actual benchmark measurements. Actual performance will vary based on network conditions, API rate limiting, hardware specifications, and system load. To obtain real measurements for your environment, run `./run_all_benchmarks.sh` with network access to jsonplaceholder.typicode.com._
 
 ### Key Metrics Explained
 

@@ -1,5 +1,5 @@
 {
-  "_comment": "Sample results for demonstration purposes. Actual performance depends on network conditions, API rate limiting, and hardware. These numbers represent realistic production-like scenarios with 10000 concurrent requests using sttp client with parallel collections.",
+  "_comment": "SAMPLE DATA - These are illustrative results for demonstration purposes. Actual performance depends on network conditions, API rate limiting, and hardware. Run './run_all_benchmarks.sh' with network access to obtain real measurements for your environment. These numbers represent realistic production-like scenarios with 10000 concurrent requests using sttp client with parallel collections.",
   "language": "scala",
   "total_requests": 10000,
   "successful_requests": 10000,
