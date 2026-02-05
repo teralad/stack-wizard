@@ -1,6 +1,6 @@
 # Stack Wizard - Multi-Language Performance Comparison Suite
 
-A comprehensive performance benchmarking suite that implements identical algorithms across 7 programming languages: **Python**, **JavaScript (Node.js)**, **Go**, **Rust**, **Java**, **C++**, and **Ruby**.
+A comprehensive performance benchmarking suite that implements identical algorithms across **10 programming languages**: **Python**, **JavaScript (Node.js)**, **Go**, **Rust**, **Java**, **C++**, **Ruby**, **Elixir**, **C#**, and **Scala**.
 
 ## 📋 Overview
 
@@ -30,10 +30,11 @@ This project benchmarks the same 5 performance-critical operations across all la
 - **Metric**: Time for each operation
 
 ### 5. API Requests
-- **Operation**: 1,000 concurrent HTTP GET requests
+- **Operation**: 10,000 concurrent HTTP GET requests (1,000 for Python/JavaScript/Go/Rust/Java/C++/Ruby)
 - **Endpoint**: JSONPlaceholder API (https://jsonplaceholder.typicode.com/posts/1)
 - **Metrics**: Total time, requests per second, response times (min/max/avg/median/p95/p99), success rate
 - **Implementation**: Async/concurrent for all languages with proper connection pooling
+- **Note**: New languages (Elixir, C#, Scala) implement enhanced version with 10,000 requests
 
 ## 📊 Performance Comparison Tables
 
@@ -46,7 +47,10 @@ This project benchmarks the same 5 performance-critical operations across all la
 | C++        | ~60 ms         | 1.2x           |
 | Go         | ~120 ms        | 2.4x           |
 | Java       | ~150 ms        | 3.0x           |
+| Scala      | TBD            | TBD            |
+| C#         | TBD            | TBD            |
 | JavaScript | ~200 ms        | 4.0x           |
+| Elixir     | TBD            | TBD            |
 | Python     | ~450 ms        | 9.0x           |
 | Ruby       | ~800 ms        | 16.0x          |
 
@@ -57,7 +61,10 @@ This project benchmarks the same 5 performance-critical operations across all la
 | Rust       | ~45 ms         | 1.1x           |
 | Go         | ~50 ms         | 1.25x          |
 | Java       | ~55 ms         | 1.4x           |
+| Scala      | TBD            | TBD            |
+| C#         | TBD            | TBD            |
 | JavaScript | ~150 ms        | 3.8x           |
+| Elixir     | TBD            | TBD            |
 | Python     | ~3500 ms       | 87.5x          |
 | Ruby       | ~7000 ms       | 175.0x         |
 
@@ -68,7 +75,10 @@ This project benchmarks the same 5 performance-critical operations across all la
 | C++        | <1 ms          | 1.0x           |
 | Go         | <1 ms          | 1.0x           |
 | Java       | <1 ms          | 1.0x           |
+| Scala      | <1 ms          | 1.0x           |
+| C#         | <1 ms          | 1.0x           |
 | JavaScript | <1 ms          | 1.0x           |
+| Elixir     | <1 ms          | 1.0x           |
 | Python     | <1 ms          | 1.0x           |
 | Ruby       | <1 ms          | 1.0x           |
 
@@ -79,7 +89,10 @@ This project benchmarks the same 5 performance-critical operations across all la
 | C++        | ~18 ms         | 1.2x           |
 | Go         | ~25 ms         | 1.7x           |
 | Java       | ~30 ms         | 2.0x           |
+| Scala      | TBD            | TBD            |
+| C#         | TBD            | TBD            |
 | JavaScript | ~40 ms         | 2.7x           |
+| Elixir     | TBD            | TBD            |
 | Python     | ~250 ms        | 16.7x          |
 | Ruby       | ~400 ms        | 26.7x          |
 
@@ -90,15 +103,20 @@ This project benchmarks the same 5 performance-critical operations across all la
 | C++        | ~8 ms         | ~2 ms               | ~25 ms         |
 | Go         | ~10 ms        | ~5 ms               | ~30 ms         |
 | Java       | ~12 ms        | ~3 ms               | ~35 ms         |
+| Scala      | TBD           | TBD                 | TBD            |
+| C#         | TBD           | TBD                 | TBD            |
 | JavaScript | ~15 ms        | ~100 ms             | ~40 ms         |
+| Elixir     | TBD           | TBD                 | TBD            |
 | Python     | ~20 ms        | ~300 ms             | ~50 ms         |
 | Ruby       | ~25 ms        | ~500 ms             | ~60 ms         |
 
 ## 🌐 API Performance Comparison
 
-We've enhanced our API performance testing to provide comprehensive metrics across all 7 languages. Each implementation makes **1,000 concurrent HTTP requests** to test real-world API interaction performance.
+We've enhanced our API performance testing to provide comprehensive metrics across all **10 languages**. The original 7 languages make **1,000 concurrent HTTP requests** while the new languages (Elixir, C#, Scala) implement an enhanced version with **10,000 concurrent requests** to test real-world API interaction performance at scale.
 
 ### Performance Summary Table
+
+**Legacy Implementation (1,000 requests)**
 
 | Language   | Total Time | Requests/sec | Avg Response (ms) | P95 (ms) | P99 (ms) | Success Rate |
 |------------|------------|--------------|-------------------|----------|----------|--------------|
@@ -109,6 +127,14 @@ We've enhanced our API performance testing to provide comprehensive metrics acro
 | JavaScript | 10.23s     | 97.75        | 105.8             | 165.4    | 198.7    | 100%         |
 | Python     | 12.45s     | 80.32        | 120.5             | 180.2    | 220.5    | 100%         |
 | Ruby       | 14.32s     | 69.83        | 135.2             | 210.5    | 248.3    | 100%         |
+
+**Enhanced Implementation (10,000 requests)**
+
+| Language | Total Time | Requests/sec | Avg Response (ms) | P95 (ms) | P99 (ms) | Success Rate |
+|----------|------------|--------------|-------------------|----------|----------|--------------|
+| Elixir   | TBD        | TBD          | TBD               | TBD      | TBD      | TBD          |
+| C#       | TBD        | TBD          | TBD               | TBD      | TBD      | TBD          |
+| Scala    | TBD        | TBD          | TBD               | TBD      | TBD      | TBD          |
 
 ### Key Metrics Explained
 
@@ -157,6 +183,9 @@ Each language uses optimal concurrency patterns:
 - **Java**: `HttpClient` with `CompletableFuture` for async operations
 - **C++**: libcurl with std::thread for concurrent requests
 - **Ruby**: Native Net::HTTP with threads for parallel execution
+- **Elixir**: Task.async_stream with BEAM VM for lightweight process-based concurrency
+- **C#**: HttpClient with Task.WhenAll and async/await for efficient async operations
+- **Scala**: sttp client with parallel collections for concurrent execution
 
 All implementations use:
 - Connection pooling for efficiency
@@ -189,6 +218,15 @@ cd cpp && mkdir -p build && cd build && cmake .. && make && ./api_requests
 
 # Ruby
 cd ruby && ruby api_requests.rb
+
+# Elixir
+cd elixir && mix deps.get && mix run -e "ApiRequests.run_benchmark()"
+
+# C#
+cd csharp && dotnet run
+
+# Scala
+cd scala && sbt "runMain ApiRequests"
 ```
 
 Each test generates an `api_results.json` file with comprehensive metrics.
@@ -344,6 +382,59 @@ ruby strings.rb
 ruby api_requests.rb
 ```
 
+### Elixir
+```bash
+cd elixir
+mix deps.get  # Install dependencies
+elixir run_all.exs
+```
+
+**Individual tests:**
+```bash
+# Using Mix
+cd elixir
+mix run -e "Sorting.run_benchmark()"
+mix run -e "Fibonacci.run_benchmark()"
+mix run -e "Matrix.run_benchmark()"
+mix run -e "Strings.run_benchmark()"
+mix run -e "ApiRequests.run_benchmark()"
+```
+
+**Note**: Requires Elixir 1.14+ and Mix build tool.
+
+### C#
+```bash
+cd csharp
+dotnet restore  # Install dependencies
+dotnet run
+```
+
+**Individual tests:**
+```bash
+# Run individual classes by modifying Program.cs to call specific benchmarks
+dotnet run
+```
+
+**Note**: Requires .NET SDK 8.0 or higher.
+
+### Scala
+```bash
+cd scala
+sbt compile  # Compile the project
+sbt run
+```
+
+**Individual tests:**
+```bash
+sbt "runMain Sorting"
+sbt "runMain Fibonacci"
+sbt "runMain Matrix"
+sbt "runMain Strings"
+sbt "runMain ApiRequests"
+```
+
+**Note**: Requires sbt (Scala Build Tool) and Scala 2.13+.
+
 ## 📦 Dependencies
 
 ### Python
@@ -376,6 +467,22 @@ ruby api_requests.rb
 ### Ruby
 - Standard library only
 
+### Elixir
+- `httpoison` - HTTP client for API requests
+- `jason` - JSON encoding/decoding
+- Elixir 1.14+ with Mix
+
+### C#
+- .NET SDK 8.0+
+- `Newtonsoft.Json` - For JSON serialization (API performance tests)
+
+### Scala
+- Scala 2.13+
+- sbt (Scala Build Tool)
+- `sttp.client3` - HTTP client for API requests
+- `scala-parallel-collections` - For parallel processing
+- `ujson` - JSON library
+
 ## 🎯 Key Findings
 
 ### General Observations
@@ -396,6 +503,33 @@ ruby api_requests.rb
 - **JavaScript**: Surprisingly fast for an interpreted language, V8 engine optimizations
 - **Python**: Slowest but most readable, vast library ecosystem
 - **Ruby**: Similar to Python in performance, elegant syntax
+- **Elixir**: Functional language on BEAM VM with excellent fault tolerance and lightweight processes
+- **C#**: Modern language with strong async support and comprehensive standard library
+- **Scala**: JVM-based functional/OO hybrid with strong type system and parallel collections
+
+### Concurrency Models
+
+Different languages handle concurrency using different paradigms:
+
+- **Elixir**: Uses the BEAM VM (Erlang VM) with lightweight processes (actors). Millions of processes can run concurrently with message passing for communication. Excellent for distributed systems and high-concurrency scenarios.
+
+- **C#**: Task Parallel Library (TPL) with async/await pattern. Built on thread pool abstraction with efficient task scheduling. Provides high-level async operations with excellent IDE support.
+
+- **Scala**: Futures and parallel collections on the JVM. ExecutionContext manages thread pools. Can also use Akka actors for more complex concurrency patterns.
+
+- **Go**: Goroutines (lightweight threads) with channels for communication. Extremely efficient context switching with minimal memory overhead per goroutine.
+
+- **Rust**: Zero-cost abstractions with async/await and tokio runtime. Compile-time guarantees prevent data races while maintaining performance.
+
+- **Java**: Thread-based with modern CompletableFuture API. JVM manages thread pool and scheduling.
+
+- **Python**: AsyncIO event loop for single-threaded concurrency. GIL limits true parallelism but excellent for I/O-bound tasks.
+
+- **JavaScript**: Event loop with Promise-based async operations. Single-threaded but highly efficient for I/O operations.
+
+- **C++**: std::thread with manual thread management. Requires careful synchronization but provides maximum control.
+
+- **Ruby**: Thread-based concurrency with GIL (Global Interpreter Lock). Similar limitations to Python but with native thread support.
 
 ## ⚙️ Fair Comparison Practices
 
@@ -430,6 +564,9 @@ Rust: 1.73.0
 Java: OpenJDK 17.0.8
 GCC: 11.4.0
 Ruby: 3.1.2
+Elixir: 1.14.0
+.NET: 8.0
+Scala: 2.13.12
 ```
 
 ## 🔧 Running All Benchmarks
