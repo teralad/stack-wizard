@@ -7,5 +7,7 @@ scalaVersion := "2.13.12"
 libraryDependencies ++= Seq(
   "com.softwaremill.sttp.client3" %% "core" % "3.8.0",
   "org.scala-lang.modules" %% "scala-parallel-collections" % "1.0.4",
-  "com.lihaoyi" %% "ujson" % "3.0.0"
+  "com.lihaoyi" %% "ujson" % "3.0.0",
+  "org.scalatest" %% "scalatest" % "3.2.17" % Test,
+  "com.github.tomakehurst" % "wiremock-jre8" % "2.35.0" % Test
 )

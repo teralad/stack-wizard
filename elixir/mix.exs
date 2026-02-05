@@ -20,7 +20,8 @@ defmodule StackWizard.MixProject do
   defp deps do
     [
       {:httpoison, "~> 2.0"},
-      {:jason, "~> 1.4"}
+      {:jason, "~> 1.4"},
+      {:bypass, "~> 2.1", only: :test}
     ]
   end
 end
