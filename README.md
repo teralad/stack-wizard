@@ -6,6 +6,40 @@ A comprehensive performance benchmarking suite that implements identical algorit
 
 This project benchmarks the same 5 performance-critical operations across all languages to provide a fair comparison of runtime performance. Each implementation uses standard library features and similar optimization levels to ensure fairness.
 
+## 🧪 Testing Framework
+
+**NEW**: The Elixir, C#, and Scala implementations now include comprehensive test suites that can validate API functionality **without requiring external network access**. These tests use mock HTTP servers to ensure reliable, fast, and repeatable testing.
+
+### Running Tests
+
+```bash
+# Run all available tests
+./run_tests.sh
+
+# Or run tests for specific languages:
+
+# C# tests (requires .NET 8.0+)
+cd csharp/Tests && dotnet test
+
+# Elixir tests (requires Elixir 1.14+)
+cd elixir && mix test
+
+# Scala tests (requires sbt)
+cd scala && sbt test
+```
+
+See [TESTING.md](TESTING.md) for detailed testing documentation.
+
+### Test Coverage
+
+Each language's test suite includes:
+- ✅ HTTP request success handling (200 OK)
+- ✅ HTTP error handling (404, 500, etc.)
+- ✅ Network error and timeout handling
+- ✅ Percentile calculations (median, P95, P99)
+- ✅ Concurrent request processing
+- ✅ Metrics structure validation
+
 ## 🧪 Benchmark Tests
 
 ### 1. Sorting Algorithm (Quicksort)
@@ -199,7 +233,9 @@ All implementations use:
 
 ### Running API Performance Tests
 
-To run the API tests yourself:
+#### Running Benchmarks (with External API)
+
+To run the API benchmarks yourself (requires internet access):
 
 ```bash
 # Python
@@ -233,7 +269,23 @@ cd csharp && dotnet run
 cd scala && sbt "runMain ApiRequests"
 ```
 
-Each test generates an `api_results.json` file with comprehensive metrics.
+Each benchmark generates an `api_results.json` file with comprehensive metrics.
+
+#### Running Tests (without External API)
+
+To test API implementations without network access (Elixir, C#, Scala only):
+
+```bash
+# Run all tests
+./run_tests.sh
+
+# Or individual tests:
+cd csharp/Tests && dotnet test    # C#
+cd elixir && mix test              # Elixir
+cd scala && sbt test               # Scala
+```
+
+These tests use mock HTTP servers to validate functionality without requiring internet access. See [TESTING.md](TESTING.md) for details.
 
 ### Generating Visualizations
 
