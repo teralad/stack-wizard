@@ -36,6 +36,9 @@ python3 stack_recommender.py --enterprise --compliance HIPAA --team-size large -
 
 # Must-use/avoid constraints
 python3 stack_recommender.py --must-use Rust --avoid Python,JavaScript -p 8 -s 7
+
+# Show only top 3 recommendations
+python3 stack_recommender.py --top 3 -p 8 -s 7
 ```
 
 ## Command-Line Options
@@ -56,6 +59,7 @@ python3 stack_recommender.py --must-use Rust --avoid Python,JavaScript -p 8 -s 7
 | `--hiring-priority` | low/medium/high | Hiring availability importance |
 | `--must-use` | comma-separated | Must-use languages |
 | `--avoid` | comma-separated | Languages to avoid |
+| `--top` | number | Limit number of recommendations (default: all) |
 | `--real-time` | flag | Real-time features needed |
 | `--ml-ai` | flag | Machine learning/AI features |
 | `--enterprise` | flag | Enterprise application |

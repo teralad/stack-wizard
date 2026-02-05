@@ -185,9 +185,9 @@ def test_balanced_requirements():
     
     recommendations = recommender.analyze_requirements(requirements)
     
-    # Should get 5 recommendations
-    assert len(recommendations) == 5, \
-        f"Expected 5 recommendations, got {len(recommendations)}"
+    # Should get all recommendations by default
+    assert len(recommendations) == len(STACK_OPTIONS), \
+        f"Expected {len(STACK_OPTIONS)} recommendations, got {len(recommendations)}"
     
     # All should have positive scores
     for _, score, _ in recommendations:
@@ -362,7 +362,7 @@ def test_unknown_must_use_fallback():
     }
 
     recommendations = recommender.analyze_requirements(requirements)
-    assert len(recommendations) == 5, \
+    assert len(recommendations) == len(STACK_OPTIONS), \
         "Expected fallback to full recommendations when must-use misses"
     assert recommender.requirements.get('constraint_miss') is True, \
         "Expected constraint_miss flag when must-use doesn't match"

@@ -263,8 +263,9 @@ class StackRecommender:
     def __init__(self):
         self.scores = {}
         self.requirements = {}
+        self.breakdowns = {}
     
-    def analyze_requirements(self, requirements: Dict) -> List[Tuple[str, float, str]]:
+    def analyze_requirements(self, requirements: Dict, top_n: int = None) -> List[Tuple[str, float, str]]:
         """
         Analyze requirements and score each language
         
@@ -276,6 +277,7 @@ class StackRecommender:
         """
         self.requirements = requirements
         self.scores = {}
+        self.breakdowns = {}
         
         # Apply hard constraints first
         constrained_languages = list(STACK_OPTIONS.keys())
@@ -296,134 +298,173 @@ class StackRecommender:
         for lang_key in constrained_languages:
             lang_data = STACK_OPTIONS[lang_key]
             score = 0.0
+            breakdown = {
+                'performance': 0.0,
+                'scalability': 0.0,
+                'development_speed': 0.0,
+                'team_size': 0.0,
+                'project_type': 0.0,
+                'real_time': 0.0,
+                'ml_ai': 0.0,
+                'team_expertise': 0.0,
+                'enterprise': 0.0,
+                'microservices': 0.0,
+                'budget': 0.0,
+                'deployment': 0.0,
+                'latency': 0.0,
+                'throughput': 0.0,
+                'data_store': 0.0,
+                'compliance': 0.0,
+                'hiring': 0.0,
+            }
             
             # Performance requirements (0-10)
             performance_need = requirements.get('performance', 5)
             if lang_key in ['rust', 'cpp']:
-                score += performance_need * 1.5
+                breakdown['performance'] = performance_need * 1.5
             elif lang_key in ['go', 'java', 'csharp']:
-                score += performance_need * 1.2
+                breakdown['performance'] = performance_need * 1.2
             elif lang_key in ['javascript', 'elixir', 'scala']:
-                score += performance_need * 0.8
+                breakdown['performance'] = performance_need * 0.8
             else:
-                score += performance_need * 0.5
+                breakdown['performance'] = performance_need * 0.5
+            score += breakdown['performance']
             
             # Scalability requirements (0-10)
             scalability_need = requirements.get('scalability', 5)
             if lang_key in ['go', 'elixir', 'rust']:
-                score += scalability_need * 1.4
+                breakdown['scalability'] = scalability_need * 1.4
             elif lang_key in ['java', 'csharp', 'scala']:
-                score += scalability_need * 1.2
+                breakdown['scalability'] = scalability_need * 1.2
             else:
-                score += scalability_need * 0.8
+                breakdown['scalability'] = scalability_need * 0.8
+            score += breakdown['scalability']
             
             # Development speed priority (0-10)
             dev_speed = requirements.get('development_speed', 5)
             if lang_key in ['python', 'ruby', 'javascript']:
-                score += dev_speed * 1.5
+                breakdown['development_speed'] = dev_speed * 1.5
             elif lang_key in ['go', 'java', 'csharp']:
-                score += dev_speed * 1.0
+                breakdown['development_speed'] = dev_speed * 1.0
             else:
-                score += dev_speed * 0.6
+                breakdown['development_speed'] = dev_speed * 0.6
+            score += breakdown['development_speed']
             
             # Team size consideration
             team_size = requirements.get('team_size', 'medium')
             if team_size == 'large' and lang_data['team_size'] in ['medium-to-large', 'any']:
-                score += 10
+                breakdown['team_size'] = 10
             elif team_size == 'small' and lang_data['team_size'] in ['small', 'small-to-medium', 'any']:
-                score += 8
+                breakdown['team_size'] = 8
+            score += breakdown['team_size']
             
             # Project type matching
             project_type = requirements.get('project_type', '')
             if project_type and self._matches_project_type(project_type, lang_data):
-                score += 15
+                breakdown['project_type'] = 15
+            score += breakdown['project_type']
             
             # Real-time requirements
             if requirements.get('real_time', False):
                 if lang_key in ['elixir', 'javascript', 'go']:
-                    score += 12
+                    breakdown['real_time'] = 12
+            score += breakdown['real_time']
             
             # Machine learning / AI
             if requirements.get('ml_ai', False):
                 if lang_key == 'python':
-                    score += 20
+                    breakdown['ml_ai'] = 20
+            score += breakdown['ml_ai']
             
             # Existing team expertise
             team_expertise = requirements.get('team_expertise', [])
             if lang_key in [e.lower() for e in team_expertise]:
-                score += 15
+                breakdown['team_expertise'] = 15
+            score += breakdown['team_expertise']
             
             # Enterprise requirements
             if requirements.get('enterprise', False):
                 if lang_key in ['java', 'csharp', 'scala']:
-                    score += 12
+                    breakdown['enterprise'] = 12
+            score += breakdown['enterprise']
             
             # Microservices architecture
             if requirements.get('microservices', False):
                 if lang_key in ['go', 'java', 'javascript']:
-                    score += 10
+                    breakdown['microservices'] = 10
+            score += breakdown['microservices']
 
             # Budget constraints
             budget = requirements.get('budget', '').lower()
             if budget == 'low' and lang_key in ['python', 'javascript', 'go', 'ruby']:
-                score += 5
+                breakdown['budget'] = 5
             elif budget == 'high' and lang_key in ['java', 'csharp', 'rust']:
-                score += 3
+                breakdown['budget'] = 3
+            score += breakdown['budget']
 
             # Deployment model
             deployment = requirements.get('deployment', '').lower()
             if deployment == 'serverless' and lang_key in ['python', 'javascript', 'go']:
-                score += 6
+                breakdown['deployment'] = 6
             elif deployment == 'containers' and lang_key in ['go', 'rust', 'java']:
-                score += 4
+                breakdown['deployment'] = 4
             elif deployment == 'on-prem' and lang_key in ['java', 'csharp']:
-                score += 5
+                breakdown['deployment'] = 5
             elif deployment == 'edge' and lang_key in ['rust', 'cpp', 'go']:
-                score += 6
+                breakdown['deployment'] = 6
+            score += breakdown['deployment']
 
             # Reliability targets
             latency_ms = requirements.get('latency_ms')
             if isinstance(latency_ms, int):
                 if latency_ms <= 100 and lang_key in ['rust', 'cpp', 'go']:
-                    score += 6
+                    breakdown['latency'] = 6
                 elif latency_ms <= 500 and lang_key in ['java', 'csharp', 'go']:
-                    score += 4
+                    breakdown['latency'] = 4
+            score += breakdown['latency']
 
             throughput_rps = requirements.get('throughput_rps')
             if isinstance(throughput_rps, int):
                 if throughput_rps >= 10000 and lang_key in ['go', 'rust', 'cpp']:
-                    score += 6
+                    breakdown['throughput'] = 6
                 elif throughput_rps >= 1000 and lang_key in ['go', 'rust', 'java']:
-                    score += 4
+                    breakdown['throughput'] = 4
+            score += breakdown['throughput']
 
             # Data store preference
             data_store = requirements.get('data_store', '').lower()
             if data_store == 'sql' and lang_key in ['java', 'csharp', 'python', 'ruby']:
-                score += 3
+                breakdown['data_store'] = 3
             elif data_store == 'nosql' and lang_key in ['javascript', 'go']:
-                score += 3
+                breakdown['data_store'] = 3
+            score += breakdown['data_store']
 
             # Compliance requirements
             compliance = [c.lower() for c in requirements.get('compliance', [])]
             if compliance:
                 if lang_key in ['java', 'csharp']:
-                    score += 6
+                    breakdown['compliance'] = 6
                 elif lang_key in ['python', 'go']:
-                    score += 3
+                    breakdown['compliance'] = 3
+            score += breakdown['compliance']
 
             # Hiring priority
             hiring_priority = requirements.get('hiring_priority', '').lower()
             if hiring_priority == 'high' and lang_key in ['python', 'javascript', 'java', 'csharp']:
-                score += 5
+                breakdown['hiring'] = 5
+            score += breakdown['hiring']
             
             self.scores[lang_key] = score
+            self.breakdowns[lang_key] = breakdown
         
-        # Get top recommendations
+        # Get recommendations (all by default, or top_n)
         sorted_langs = sorted(self.scores.items(), key=lambda x: x[1], reverse=True)
-        
+        if top_n is not None and top_n > 0:
+            sorted_langs = sorted_langs[:top_n]
+
         # Match with best framework for each language
         recommendations = []
-        for lang_key, score in sorted_langs[:5]:  # Top 5
+        for lang_key, score in sorted_langs:
             framework = self._recommend_framework(lang_key, requirements)
             recommendations.append((lang_key, score, framework))
         
@@ -441,44 +482,86 @@ class StackRecommender:
         
         # Simple framework selection logic
         project_type = requirements.get('project_type', '').lower()
+        deployment = requirements.get('deployment', '').lower()
+        real_time = requirements.get('real_time', False)
+        enterprise = requirements.get('enterprise', False)
+        team_size = requirements.get('team_size', '')
+        performance = requirements.get('performance', 5)
+        ml_ai = requirements.get('ml_ai', False)
         
         if lang_key == 'python':
-            if 'api' in project_type or requirements.get('ml_ai'):
+            if 'api' in project_type or ml_ai:
                 return 'FastAPI'
-            elif requirements.get('enterprise') or 'complex' in project_type:
+            elif enterprise or 'complex' in project_type:
                 return 'Django'
             else:
                 return 'Flask'
         
         elif lang_key == 'javascript':
-            if requirements.get('enterprise') or requirements.get('team_size') == 'large':
+            if enterprise or team_size == 'large':
                 return 'NestJS'
+            if real_time:
+                return 'Fastify'
             else:
                 return 'Express.js'
         
         elif lang_key == 'java':
+            if deployment in ['serverless', 'containers']:
+                return 'Quarkus'
+            if real_time or 'event' in project_type:
+                return 'Vert.x'
+            if performance >= 7 and deployment in ['containers', 'edge']:
+                return 'Micronaut'
+            if 'minimal' in project_type or 'simple' in project_type:
+                return 'Javalin'
             return 'Spring Boot'
         
         elif lang_key == 'go':
-            return 'Gin'
+            if 'api' in project_type and performance >= 7:
+                return 'Gin'
+            if 'full' in project_type or 'web app' in project_type:
+                return 'Buffalo'
+            if 'contract' in project_type or 'design' in project_type:
+                return 'Goa'
+            if 'simple' in project_type or 'minimal' in project_type:
+                return 'Chi'
+            return 'Echo'
         
         elif lang_key == 'rust':
-            return 'Actix-web'
+            if real_time or 'event' in project_type:
+                return 'Actix-web'
+            if 'api' in project_type and performance >= 8:
+                return 'Actix-web'
+            return 'Axum'
         
         elif lang_key == 'ruby':
+            if 'api' in project_type:
+                return 'Grape'
             return 'Ruby on Rails'
         
         elif lang_key == 'elixir':
-            return 'Phoenix'
+            if real_time or 'event' in project_type:
+                return 'Phoenix'
+            if 'iot' in project_type or 'embedded' in project_type:
+                return 'Nerves'
+            return 'Plug'
         
         elif lang_key == 'csharp':
+            if 'minimal' in project_type or performance >= 8:
+                return 'Minimal APIs'
+            if 'api' in project_type:
+                return 'FastEndpoints'
             return 'ASP.NET Core'
         
         elif lang_key == 'scala':
+            if real_time or 'stream' in project_type:
+                return 'Akka HTTP'
             return 'Play Framework'
         
         elif lang_key == 'cpp':
-            return 'Drogon'
+            if performance >= 9:
+                return 'Drogon'
+            return 'Crow'
         
         return frameworks[0] if frameworks else 'None'
     
@@ -488,32 +571,59 @@ class StackRecommender:
         output.append("\n" + "="*80)
         output.append("  STACK WIZARD - BACKEND STACK RECOMMENDATIONS")
         output.append("="*80 + "\n")
-        
+        headers = [
+            "Rank", "Language", "Framework", "Score",
+            "Perf", "Scale", "Dev", "Team", "Type",
+            "RT", "ML", "Ent", "Micro",
+            "Budget", "Deploy", "Lat", "RPS", "Data",
+            "Comp", "Hire", "Expertise"
+        ]
+
+        rows = []
         for idx, (lang_key, score, framework) in enumerate(recommendations, 1):
             lang_data = STACK_OPTIONS[lang_key]
-            output.append(f"\n#{idx}. {lang_data['name']} with {framework}")
-            output.append(f"    Score: {score:.1f}/100")
-            output.append(f"    Framework Type: {FRAMEWORK_DETAILS.get(framework, {}).get('type', 'N/A')}")
-            output.append(f"\n    Strengths:")
-            for strength in lang_data['strengths'][:3]:
-                output.append(f"      ✓ {strength}")
-            
-            if framework in FRAMEWORK_DETAILS:
-                output.append(f"\n    Framework Strengths:")
-                for strength in FRAMEWORK_DETAILS[framework]['strengths'][:3]:
-                    output.append(f"      ✓ {strength}")
-            
-            output.append(f"\n    Best For:")
-            for use_case in lang_data['best_for'][:3]:
-                output.append(f"      • {use_case}")
-            
-            output.append(f"\n    Considerations:")
-            for weakness in lang_data['weaknesses'][:2]:
-                output.append(f"      ⚠ {weakness}")
-            output.append("")
-        
-        output.append("="*80)
-        output.append("\nRecommendation Criteria Used:")
+            b = self.breakdowns.get(lang_key, {})
+            rows.append([
+                str(idx),
+                lang_data['name'],
+                framework,
+                f"{score:.1f}",
+                f"{b.get('performance', 0.0):.1f}",
+                f"{b.get('scalability', 0.0):.1f}",
+                f"{b.get('development_speed', 0.0):.1f}",
+                f"{b.get('team_size', 0.0):.1f}",
+                f"{b.get('project_type', 0.0):.1f}",
+                f"{b.get('real_time', 0.0):.1f}",
+                f"{b.get('ml_ai', 0.0):.1f}",
+                f"{b.get('enterprise', 0.0):.1f}",
+                f"{b.get('microservices', 0.0):.1f}",
+                f"{b.get('budget', 0.0):.1f}",
+                f"{b.get('deployment', 0.0):.1f}",
+                f"{b.get('latency', 0.0):.1f}",
+                f"{b.get('throughput', 0.0):.1f}",
+                f"{b.get('data_store', 0.0):.1f}",
+                f"{b.get('compliance', 0.0):.1f}",
+                f"{b.get('hiring', 0.0):.1f}",
+                f"{b.get('team_expertise', 0.0):.1f}",
+            ])
+
+        # Compute column widths for aligned output
+        col_widths = [len(h) for h in headers]
+        for row in rows:
+            for i, cell in enumerate(row):
+                if len(cell) > col_widths[i]:
+                    col_widths[i] = len(cell)
+
+        def _fmt_row(cells):
+            return "  ".join(cell.ljust(col_widths[i]) for i, cell in enumerate(cells))
+
+        output.append(_fmt_row(headers))
+        output.append(_fmt_row(["-" * w for w in col_widths]))
+        for row in rows:
+            output.append(_fmt_row(row))
+
+        output.append("\n" + "="*80)
+        output.append("Recommendation Criteria Used:")
         if self.requirements.get('budget'):
             output.append(f"  • Budget: {self.requirements['budget']}")
         if self.requirements.get('deployment'):
@@ -715,8 +825,12 @@ def interactive_mode():
     
     # Analyze and show recommendations
     print("\n\nAnalyzing your requirements...")
+    print("\n20. How many recommendations should we show? (Enter for all)")
+    top_n_input = input("    Your answer: ").strip()
+    top_n = int(top_n_input) if top_n_input.isdigit() else None
+
     recommender = StackRecommender()
-    recommendations = recommender.analyze_requirements(requirements)
+    recommendations = recommender.analyze_requirements(requirements, top_n=top_n)
     print(recommender.format_recommendation(recommendations))
     
     # Save results
@@ -746,6 +860,7 @@ def cli_mode(args):
     
     # Parse arguments
     i = 0
+    top_n = None
     while i < len(args):
         arg = args[i]
         if arg in ['--performance', '-p'] and i + 1 < len(args):
@@ -811,6 +926,12 @@ def cli_mode(args):
         elif arg in ['--team-expertise', '-e'] and i + 1 < len(args):
             requirements['team_expertise'] = args[i + 1].split(',')
             i += 2
+        elif arg == '--top' and i + 1 < len(args):
+            try:
+                top_n = int(args[i + 1])
+            except ValueError:
+                top_n = None
+            i += 2
         else:
             i += 1
     
@@ -819,7 +940,7 @@ def cli_mode(args):
         return
     
     recommender = StackRecommender()
-    recommendations = recommender.analyze_requirements(requirements)
+    recommendations = recommender.analyze_requirements(requirements, top_n=top_n)
     print(recommender.format_recommendation(recommendations))
 
 
@@ -852,6 +973,7 @@ OPTIONS:
     --enterprise                 Enterprise application
     --microservices              Microservices architecture
     -e, --team-expertise LANGS   Team expertise (comma-separated languages)
+    --top NUM                    Limit number of recommendations (default: all)
     -h, --help                   Show this help message
 
 EXAMPLES:
