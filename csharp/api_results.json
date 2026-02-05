@@ -1,0 +1,10 @@
+{
+  "language": "csharp",
+  "total_requests": 10000,
+  "successful_requests": 0,
+  "failed_requests": 10000,
+  "total_time_seconds": 8.44,
+  "requests_per_second": 1184.23,
+  "response_times": null,
+  "timeseries": []
+}

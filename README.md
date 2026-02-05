@@ -45,14 +45,14 @@ This project benchmarks the same 5 performance-critical operations across all la
 |------------|----------------|----------------|
 | Rust       | ~50 ms         | 1.0x (fastest) |
 | C++        | ~60 ms         | 1.2x           |
+| Elixir     | ~80 ms         | 1.6x           |
 | Go         | ~120 ms        | 2.4x           |
 | Java       | ~150 ms        | 3.0x           |
-| Scala      | TBD            | TBD            |
-| C#         | TBD            | TBD            |
+| C#         | ~192 ms        | 3.8x           |
 | JavaScript | ~200 ms        | 4.0x           |
-| Elixir     | TBD            | TBD            |
 | Python     | ~450 ms        | 9.0x           |
 | Ruby       | ~800 ms        | 16.0x          |
+| Scala      | TBD            | TBD            |
 
 ### Fibonacci Recursive (n=35)
 | Language   | Execution Time | Relative Speed |
@@ -61,12 +61,12 @@ This project benchmarks the same 5 performance-critical operations across all la
 | Rust       | ~45 ms         | 1.1x           |
 | Go         | ~50 ms         | 1.25x          |
 | Java       | ~55 ms         | 1.4x           |
-| Scala      | TBD            | TBD            |
-| C#         | TBD            | TBD            |
+| C#         | ~89 ms         | 2.2x           |
 | JavaScript | ~150 ms        | 3.8x           |
-| Elixir     | TBD            | TBD            |
+| Elixir     | ~159 ms        | 4.0x           |
 | Python     | ~3500 ms       | 87.5x          |
 | Ruby       | ~7000 ms       | 175.0x         |
+| Scala      | TBD            | TBD            |
 
 ### Fibonacci Iterative (n=40)
 | Language   | Execution Time | Relative Speed |
@@ -85,30 +85,30 @@ This project benchmarks the same 5 performance-critical operations across all la
 ### Matrix Multiplication (100x100)
 | Language   | Execution Time | Relative Speed |
 |------------|----------------|----------------|
+| C#         | ~7 ms          | 0.5x           |
 | Rust       | ~15 ms         | 1.0x (fastest) |
 | C++        | ~18 ms         | 1.2x           |
 | Go         | ~25 ms         | 1.7x           |
 | Java       | ~30 ms         | 2.0x           |
-| Scala      | TBD            | TBD            |
-| C#         | TBD            | TBD            |
 | JavaScript | ~40 ms         | 2.7x           |
-| Elixir     | TBD            | TBD            |
+| Elixir     | ~64 ms         | 4.3x           |
 | Python     | ~250 ms        | 16.7x          |
 | Ruby       | ~400 ms        | 26.7x          |
+| Scala      | TBD            | TBD            |
 
 ### String Operations
 | Language   | Reversal (1M) | Concatenation (10K) | Pattern Search |
 |------------|---------------|---------------------|----------------|
+| C#         | ~1 ms         | ~0.3 ms             | ~65 ms         |
 | Rust       | ~5 ms         | ~1 ms               | ~20 ms         |
 | C++        | ~8 ms         | ~2 ms               | ~25 ms         |
 | Go         | ~10 ms        | ~5 ms               | ~30 ms         |
 | Java       | ~12 ms        | ~3 ms               | ~35 ms         |
-| Scala      | TBD           | TBD                 | TBD            |
-| C#         | TBD           | TBD                 | TBD            |
 | JavaScript | ~15 ms        | ~100 ms             | ~40 ms         |
-| Elixir     | TBD           | TBD                 | TBD            |
+| Elixir     | ~248 ms       | ~2 ms               | ~20 ms         |
 | Python     | ~20 ms        | ~300 ms             | ~50 ms         |
 | Ruby       | ~25 ms        | ~500 ms             | ~60 ms         |
+| Scala      | TBD           | TBD                 | TBD            |
 
 ## 🌐 API Performance Comparison
 
@@ -132,9 +132,11 @@ We've enhanced our API performance testing to provide comprehensive metrics acro
 
 | Language | Total Time | Requests/sec | Avg Response (ms) | P95 (ms) | P99 (ms) | Success Rate |
 |----------|------------|--------------|-------------------|----------|----------|--------------|
-| Elixir   | TBD        | TBD          | TBD               | TBD      | TBD      | TBD          |
-| C#       | TBD        | TBD          | TBD               | TBD      | TBD      | TBD          |
-| Scala    | TBD        | TBD          | TBD               | TBD      | TBD      | TBD          |
+| Elixir   | *          | *            | *                 | *        | *        | *            |
+| C#       | *          | *            | *                 | *        | *        | *            |
+| Scala    | *          | *            | *                 | *        | *        | *            |
+
+_* API benchmarks require external network access to jsonplaceholder.typicode.com and may not run in restricted environments. Run the benchmarks locally to obtain results._
 
 ### Key Metrics Explained
 
