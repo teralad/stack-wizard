@@ -236,14 +236,5 @@ namespace StackWizard
 
             Console.WriteLine(new string('=', 60) + "\n");
         }
-
-        /// <summary>
-        /// Main entry point for running API benchmark separately.
-        /// </summary>
-        public static async Task Main(string[] args)
-        {
-            var metrics = await RunBenchmarkAsync();
-            PrintResults(metrics);
-        }
     }
 }
