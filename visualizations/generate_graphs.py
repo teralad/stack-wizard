@@ -37,7 +37,7 @@ COLORS = {
     'ruby': '#cc342d',
     'elixir': '#4e2a8e',
     'csharp': '#68217a',
-    'scala': '#dc322f'
+    'scala': '#c22d40'
 }
 
 def load_results():

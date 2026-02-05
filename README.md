@@ -565,7 +565,7 @@ Java: OpenJDK 17.0.8
 GCC: 11.4.0
 Ruby: 3.1.2
 Elixir: 1.14.0
-.NET: 6.0
+.NET: 8.0
 Scala: 2.13.12
 ```
 
