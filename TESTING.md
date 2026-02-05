@@ -2,6 +2,27 @@
 
 This document provides instructions for testing the newly added Elixir, C#, and Scala implementations.
 
+## Overview
+
+The API request benchmarks for Elixir, C#, and Scala now include comprehensive test frameworks that can verify functionality **without requiring external network access**. These tests use mock HTTP servers to simulate API responses, allowing for reliable and fast testing in any environment.
+
+## Testing Frameworks
+
+### Elixir - Bypass
+- **Framework**: ExUnit (built-in testing framework)
+- **HTTP Mocking**: Bypass library
+- **Purpose**: Mock HTTP endpoints for isolated API testing
+
+### C# - xUnit + WireMock.Net
+- **Framework**: xUnit
+- **HTTP Mocking**: WireMock.Net
+- **Purpose**: Integration testing with simulated HTTP responses
+
+### Scala - ScalaTest + WireMock
+- **Framework**: ScalaTest
+- **HTTP Mocking**: WireMock JRE8
+- **Purpose**: Functional testing with mock HTTP server
+
 ## Prerequisites
 
 ### Elixir
@@ -29,16 +50,33 @@ This document provides instructions for testing the newly added Elixir, C#, and 
 
 ### Elixir
 
+#### Running Unit Tests
+
 ```bash
 cd elixir
 
-# Install dependencies
+# Install dependencies (including test dependencies)
 mix deps.get
+
+# Run all unit tests
+mix test
+
+# Run tests with verbose output
+mix test --trace
+
+# Run specific test file
+mix test test/api_requests_test.exs
+```
+
+#### Running Benchmarks
+
+```bash
+cd elixir
 
 # Run all benchmarks
 elixir run_all.exs
 
-# Run individual tests
+# Run individual benchmarks
 mix run -e "Sorting.run_benchmark()"
 mix run -e "Fibonacci.run_benchmark()"
 mix run -e "Matrix.run_benchmark()"
@@ -46,13 +84,39 @@ mix run -e "Strings.run_benchmark()"
 mix run -e "ApiRequests.run_benchmark()"
 ```
 
+**Test Coverage**:
+- HTTP request success handling (200 OK)
+- HTTP error handling (404, 500, etc.)
+- Network error handling
+- Percentile calculations (median, P95, P99)
+- Concurrent request processing
+- Metrics structure validation
+
 ### C#
+
+#### Running Unit Tests
 
 ```bash
 cd csharp
 
 # Restore dependencies
 dotnet restore
+
+# Run all unit tests
+cd Tests
+dotnet test
+
+# Run tests with detailed output
+dotnet test --verbosity detailed
+
+# Run specific test
+dotnet test --filter "FullyQualifiedName~ApiRequestsTests.MakeRequest_Returns_Success_For_200_Response"
+```
+
+#### Running Benchmarks
+
+```bash
+cd csharp
 
 # Build the project
 dotnet build
@@ -63,7 +127,17 @@ dotnet run
 # The project runs all 5 benchmarks in sequence
 ```
 
+**Test Coverage**:
+- HTTP request success handling (200 OK)
+- HTTP error handling (404, 500, etc.)
+- Request timeout handling
+- Percentile calculations (median, P95, P99)
+- Concurrent request processing (100 requests)
+- Metrics structure validation
+
 ### Scala
+
+#### Running Unit Tests
 
 ```bash
 cd scala
@@ -71,15 +145,117 @@ cd scala
 # Compile the project
 sbt compile
 
+# Run all unit tests
+sbt test
+
+# Run specific test suite
+sbt "testOnly ApiRequestsSpec"
+
+# Run tests with detailed output
+sbt "testOnly * -- -oD"
+```
+
+#### Running Benchmarks
+
+```bash
+cd scala
+
 # Run all benchmarks
 sbt run
 
-# Run individual tests
+# Run individual benchmarks
 sbt "runMain Sorting"
 sbt "runMain Fibonacci"
 sbt "runMain Matrix"
 sbt "runMain Strings"
 sbt "runMain ApiRequests"
+```
+
+**Test Coverage**:
+- HTTP request success handling (200 OK)
+- HTTP error handling (404, 500, etc.)
+- Network error handling
+- Percentile calculations (median, P95, P99)
+- Concurrent request processing (parallel collections)
+- Metrics structure validation
+
+## Test Architecture
+
+### Why Mock HTTP Servers?
+
+The API benchmarks make HTTP requests to external services (jsonplaceholder.typicode.com). Testing these APIs poses several challenges:
+
+1. **Network Dependency**: External APIs may be unavailable or rate-limited
+2. **Consistency**: External responses can vary, making tests unreliable
+3. **Speed**: Network latency slows down test execution
+4. **Isolation**: Tests should work in restricted environments (CI/CD, air-gapped systems)
+
+By using mock HTTP servers, we can:
+- Test API logic without external dependencies
+- Ensure fast, reliable, and repeatable tests
+- Simulate various scenarios (errors, timeouts, different status codes)
+- Validate metrics calculation and data processing
+
+### Test Implementation Details
+
+#### Elixir - Bypass
+Bypass is a lightweight library that creates a real HTTP server on a random port for testing. Tests can configure endpoints and responses programmatically.
+
+```elixir
+# Example test structure
+setup do
+  bypass = Bypass.open()
+  {:ok, bypass: bypass}
+end
+
+test "handles 200 response", %{bypass: bypass} do
+  Bypass.expect_once(bypass, "GET", "/posts/1", fn conn ->
+    Plug.Conn.resp(conn, 200, ~s({"id": 1}))
+  end)
+  
+  url = "http://localhost:#{bypass.port}/posts/1"
+  result = ApiRequests.make_request(url, 1, start_time)
+  
+  assert result.success == true
+end
+```
+
+#### C# - WireMock.Net
+WireMock.Net is a flexible library for stubbing and mocking HTTP services. It provides a fluent API for setting up request/response expectations.
+
+```csharp
+// Example test structure
+var mockServer = WireMockServer.Start();
+
+mockServer
+    .Given(Request.Create().WithPath("/posts/1").UsingGet())
+    .RespondWith(Response.Create()
+        .WithStatusCode(200)
+        .WithBody("{\"id\": 1}"));
+
+string url = $"{mockServer.Url}/posts/1";
+var response = await httpClient.GetAsync(url);
+
+Assert.True(response.IsSuccessStatusCode);
+```
+
+#### Scala - WireMock
+WireMock is the original Java library for HTTP mocking, fully compatible with Scala. It provides comprehensive stubbing capabilities.
+
+```scala
+// Example test structure
+val wireMockServer = new WireMockServer(wireMockConfig().dynamicPort())
+wireMockServer.start()
+
+stubFor(get(urlEqualTo("/posts/1"))
+  .willReturn(aResponse()
+    .withStatus(200)
+    .withBody("""{"id": 1}""")))
+
+val url = s"http://localhost:${wireMockServer.port()}/posts/1"
+val result = ApiRequests.makeRequest(backend, url, 1, startTime)
+
+result.success shouldBe true
 ```
 
 ## Expected Output
@@ -163,20 +339,95 @@ This will:
 
 ## Troubleshooting
 
-### Elixir
+### Elixir Tests
 - **Error: Mix not found**: Install Elixir and ensure it's in your PATH
 - **Dependency errors**: Run `mix deps.get` again
-- **HTTPoison errors**: Check network connectivity
+- **Bypass errors**: Ensure Bypass dependency is installed with `mix deps.get`
+- **Test failures**: Check that tests are using the mocked server URL, not external URLs
+- **Port conflicts**: Bypass uses random ports, so conflicts are unlikely, but ensure no firewall blocking
 
-### C#
-- **Framework not found**: Requires .NET 8.0+ (modify `StackWizard.csproj` `<TargetFramework>` to match your version if needed)
-- **Compilation errors**: Run `dotnet clean` then `dotnet build`
-- **Multiple entry points**: Ensure only `Program.cs` has a `Main` method
+### C# Tests
+- **Framework not found**: Tests require .NET 8.0+ SDK
+- **Compilation errors**: Run `dotnet clean` in Tests directory, then `dotnet restore` and `dotnet build`
+- **WireMock errors**: Ensure WireMock.Net package is properly restored
+- **Test project not found**: Verify Tests/StackWizard.Tests.csproj exists
+- **Port conflicts**: WireMock uses dynamic ports, but ensure firewall allows local connections
 
-### Scala
+### Scala Tests
 - **sbt errors**: Clear cache with `sbt clean`
-- **Compilation slow**: First compilation downloads dependencies, subsequent builds are faster
-- **Runtime errors**: Check Scala version compatibility
+- **WireMock errors**: First compilation downloads WireMock JAR, this may take time
+- **Test compilation slow**: First test compilation downloads dependencies, subsequent runs are faster
+- **ClassNotFoundException**: Run `sbt clean` and `sbt test` again
+- **Port conflicts**: WireMock uses dynamic ports automatically
+
+### General Testing Tips
+
+1. **Run tests before benchmarks**: Ensure your implementation is correct before measuring performance
+2. **Mock vs Real API**: Use mock tests for development/CI, real API for actual performance benchmarks
+3. **Test isolation**: Each test should be independent and not affect others
+4. **Parallel execution**: Most test frameworks run tests in parallel by default
+5. **Flaky tests**: If tests occasionally fail, check for timing issues or resource cleanup
+
+### Network Dependency Issues
+
+If you still need to run benchmarks with real APIs:
+- Ensure internet connectivity
+- Check if `jsonplaceholder.typicode.com` is accessible
+- Consider rate limiting - space out requests if running benchmarks repeatedly
+- Use VPN or proxy if needed for restricted networks
+- For CI/CD, consider setting up a local mock API server
+
+## Continuous Integration
+
+### Running Tests in CI/CD
+
+Example GitHub Actions workflow:
+
+```yaml
+name: Test API Implementations
+
+on: [push, pull_request]
+
+jobs:
+  test-csharp:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+      - name: Run C# tests
+        run: |
+          cd csharp/Tests
+          dotnet test --logger "console;verbosity=detailed"
+  
+  test-elixir:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: erlef/setup-beam@v1
+        with:
+          elixir-version: '1.14'
+          otp-version: '25'
+      - name: Run Elixir tests
+        run: |
+          cd elixir
+          mix deps.get
+          mix test
+  
+  test-scala:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Run Scala tests
+        run: |
+          cd scala
+          sbt test
+```
 
 ## Performance Notes
 
