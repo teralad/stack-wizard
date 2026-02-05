@@ -144,9 +144,9 @@ class ApiRequestsSpec extends AnyFunSuite with Matchers with BeforeAndAfterEach 
 
     backend.close()
 
-    // Assert
-    results should have size numRequests
     val successfulResults = results.filter(_.success)
+    
+    // Assert
     successfulResults should have size numRequests
     
     // All response times should be positive

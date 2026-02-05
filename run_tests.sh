@@ -36,8 +36,11 @@ echo ""
 echo "==== Elixir Tests ===="
 if command -v mix &> /dev/null; then
     cd elixir
-    mix deps.get > /dev/null 2>&1
-    if mix test; then
+    echo "Installing Elixir dependencies..."
+    if ! mix deps.get; then
+        echo -e "${RED}✗ Failed to install Elixir dependencies${NC}"
+        ALL_TESTS_PASSED=false
+    elif mix test; then
         echo -e "${GREEN}✓ Elixir tests passed${NC}"
     else
         echo -e "${RED}✗ Elixir tests failed${NC}"
