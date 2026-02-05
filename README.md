@@ -40,6 +40,8 @@ This project benchmarks the same 5 performance-critical operations across all la
 
 > **Note**: The following are example results. Run the benchmarks on your own system for actual measurements.
 
+> **Scala Note**: Scala benchmarks are marked as TBD as they require Scala 2.13+ and sbt (Scala Build Tool) with external dependencies. These may not be available in all environments. Run the Scala benchmarks locally using the setup instructions below to obtain results.
+
 ### Sorting (Quicksort - 100K integers)
 | Language   | Execution Time | Relative Speed |
 |------------|----------------|----------------|
