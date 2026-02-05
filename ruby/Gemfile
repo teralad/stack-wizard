@@ -1,0 +1,4 @@
+source 'https://rubygems.org'
+
+# No external dependencies needed for basic benchmarks
+# All functionality uses Ruby standard library

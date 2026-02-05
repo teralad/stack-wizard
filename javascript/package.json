@@ -1,0 +1,13 @@
+{
+  "name": "stack-wizard-js-benchmarks",
+  "version": "1.0.0",
+  "description": "JavaScript performance benchmarks",
+  "main": "run_all.js",
+  "scripts": {
+    "start": "node run_all.js",
+    "test": "node run_all.js"
+  },
+  "keywords": ["benchmark", "performance"],
+  "author": "",
+  "license": "MIT"
+}
