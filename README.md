@@ -415,7 +415,7 @@ dotnet run
 dotnet run
 ```
 
-**Note**: Requires .NET SDK 6.0 or higher.
+**Note**: Requires .NET SDK 8.0 or higher.
 
 ### Scala
 ```bash
@@ -473,7 +473,7 @@ sbt "runMain ApiRequests"
 - Elixir 1.14+ with Mix
 
 ### C#
-- .NET SDK 6.0+
+- .NET SDK 8.0+
 - `Newtonsoft.Json` - For JSON serialization (API performance tests)
 
 ### Scala
