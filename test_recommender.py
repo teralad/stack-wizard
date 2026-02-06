@@ -389,6 +389,25 @@ def test_scraping_parallel_bias():
     print("✓ Scraping/parallel bias test passed")
 
 
+def test_io_bound_bias():
+    """Test that IO-bound flag favors Go/Elixir"""
+    recommender = StackRecommender()
+    requirements = {
+        'performance': 8,
+        'scalability': 7,
+        'development_speed': 4,
+        'io_bound': True
+    }
+
+    recommendations = recommender.analyze_requirements(requirements)
+    top_lang = recommendations[0][0]
+
+    assert top_lang in ['go', 'elixir'], \
+        f"Expected Go or Elixir for IO-bound, got {top_lang}"
+
+    print("✓ IO-bound bias test passed")
+
+
 def run_all_tests():
     """Run all test functions"""
     print("\n" + "="*60)
@@ -412,7 +431,8 @@ def run_all_tests():
         test_deployment_serverless_bias,
         test_compliance_bonus,
         test_unknown_must_use_fallback,
-        test_scraping_parallel_bias
+        test_scraping_parallel_bias,
+        test_io_bound_bias
     ]
     
     passed = 0

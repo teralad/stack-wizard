@@ -54,6 +54,7 @@ python3 stack_recommender.py --top 3 -p 8 -s 7
 | `--deployment` | serverless/containers/on-prem/edge/hybrid | Deployment model |
 | `--latency-ms` | number | Target p95 latency in ms |
 | `--throughput-rps` | number | Target throughput (requests per second) |
+| `--io-bound` | flag | I/O-bound workload (lots of network calls) |
 | `--data-store` | sql/nosql/mixed | Data store preference |
 | `--compliance` | comma-separated | Compliance requirements |
 | `--hiring-priority` | low/medium/high | Hiring availability importance |

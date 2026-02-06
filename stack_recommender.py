@@ -370,6 +370,15 @@ class StackRecommender:
                 if lang_key in ['go', 'elixir']:
                     breakdown['project_type'] += 10
                     score += 10
+
+            # IO-bound / crawling workloads
+            if requirements.get('io_bound', False):
+                if lang_key in ['go', 'elixir']:
+                    breakdown['project_type'] += 12
+                    score += 12
+                elif lang_key in ['javascript', 'python']:
+                    breakdown['project_type'] += 4
+                    score += 4
             
             # Real-time requirements
             if requirements.get('real_time', False):
@@ -392,7 +401,7 @@ class StackRecommender:
             # Enterprise requirements
             if requirements.get('enterprise', False):
                 if lang_key in ['java', 'csharp', 'scala']:
-                    breakdown['enterprise'] = 12
+                    breakdown['enterprise'] = 6
             score += breakdown['enterprise']
             
             # Microservices architecture
@@ -800,39 +809,44 @@ def interactive_mode():
     if data_store in ['sql', 'nosql', 'mixed']:
         requirements['data_store'] = data_store
 
+    # IO-bound workload
+    print("\n15. Is this workload primarily I/O-bound (lots of network calls)? (yes/no)")
+    io_bound = input("    Your answer: ").strip().lower()
+    requirements['io_bound'] = io_bound in ['yes', 'y', 'true']
+
     # Compliance
-    print("\n15. Any compliance requirements? (comma-separated, e.g., HIPAA, GDPR, SOC2)")
+    print("\n16. Any compliance requirements? (comma-separated, e.g., HIPAA, GDPR, SOC2)")
     compliance = input("    Your answer: ").strip()
     if compliance:
         requirements['compliance'] = [c.strip() for c in compliance.split(',') if c.strip()]
 
     # Hiring priority
-    print("\n16. How important is hiring availability? (low/medium/high)")
+    print("\n17. How important is hiring availability? (low/medium/high)")
     hiring = input("    Your answer: ").strip().lower()
     if hiring in ['low', 'medium', 'high']:
         requirements['hiring_priority'] = hiring
     
     # Team expertise
-    print("\n17. What languages does your team already know?")
+    print("\n18. What languages does your team already know?")
     print("    (comma-separated, e.g., Python, JavaScript, Java)")
     expertise = input("    Your answer: ").strip()
     if expertise:
         requirements['team_expertise'] = [e.strip() for e in expertise.split(',')]
 
     # Hard constraints
-    print("\n18. Must-use languages? (comma-separated, optional)")
+    print("\n19. Must-use languages? (comma-separated, optional)")
     must_use = input("    Your answer: ").strip()
     if must_use:
         requirements['must_use'] = [e.strip() for e in must_use.split(',')]
 
-    print("\n19. Languages to avoid? (comma-separated, optional)")
+    print("\n20. Languages to avoid? (comma-separated, optional)")
     avoid = input("    Your answer: ").strip()
     if avoid:
         requirements['avoid'] = [e.strip() for e in avoid.split(',')]
     
     # Analyze and show recommendations
     print("\n\nAnalyzing your requirements...")
-    print("\n20. How many recommendations should we show? (Enter for all)")
+    print("\n21. How many recommendations should we show? (Enter for all)")
     top_n_input = input("    Your answer: ").strip()
     top_n = int(top_n_input) if top_n_input.isdigit() else None
 
@@ -903,6 +917,9 @@ def cli_mode(args):
             except ValueError:
                 pass
             i += 2
+        elif arg == '--io-bound':
+            requirements['io_bound'] = True
+            i += 1
         elif arg == '--data-store' and i + 1 < len(args):
             requirements['data_store'] = args[i + 1]
             i += 2
@@ -970,6 +987,7 @@ OPTIONS:
     --deployment MODEL           Deployment model (serverless/containers/on-prem/edge/hybrid)
     --latency-ms NUM             Target p95 latency in ms
     --throughput-rps NUM         Target throughput (requests per second)
+    --io-bound                  I/O-bound workload (many network calls)
     --data-store TYPE            Data store preference (sql/nosql/mixed)
     --compliance LIST            Compliance requirements (comma-separated)
     --hiring-priority LEVEL      Hiring availability importance (low/medium/high)
